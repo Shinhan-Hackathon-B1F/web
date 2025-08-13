@@ -1,15 +1,11 @@
 {
-  "name": "event-board",
+  "name": "event",
   "version": "0.1.0",
   "private": true,
-  "workspaces": [
-    "apps/*"
-  ],
   "scripts": {
-    "dev:event": "npm run dev --workspace=apps/event",
-    "dev:display": "npm run dev --workspace=apps/display",
-    "dev": "concurrently \"npm run dev:event\" \"npm run dev:display\"",
-    "build": "npm run build --workspaces",
+    "dev": "next dev -p 3000",
+    "build": "next build",
+    "start": "next start -p 3000",
     "lint": "next lint"
   },
   "dependencies": {
