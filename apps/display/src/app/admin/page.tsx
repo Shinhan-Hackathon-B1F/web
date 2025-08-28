@@ -49,12 +49,6 @@ export default function Admin() {
   };
 
   const startEvent = async () => {
-
-    for (let i = 1; i <= 3; i++) {
-      console.log(`대기 중... ${i}초`)
-      await new Promise(resolve => setTimeout(resolve, 1000))
-    }
-
     const duration = 10000; // 10초
     const finishTime = new Date(Date.now() + duration);
 
