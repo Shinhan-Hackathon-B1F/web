@@ -39,8 +39,6 @@ export default function TeamSelect() {
 
   const goToGame = (teamid: string) => {
     getUserId();
-    console.log(teamid)
-    
     router.push(`/game/${teamid}`);
   };
 
