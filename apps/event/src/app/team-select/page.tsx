@@ -25,7 +25,7 @@ export default function TeamSelect() {
             "status" in payload.new &&
             payload.new.status === "active"
           ) {
-            router.push("/count");
+            router.push("/game");
           }
         }
       )
@@ -34,7 +34,7 @@ export default function TeamSelect() {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [supabase]);
+  }, [router, supabase]);
 
   const handleTeamSelect = (team: string) => {
     setSelectedTeam(team);
