@@ -2,6 +2,7 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { createClient } from "../../../../../shared/utils/supabase/client";
+import { getUserId } from "@/utils/userIdentifier";
 
 export default function TeamSelect() {
   const router = useRouter();
@@ -25,7 +26,7 @@ export default function TeamSelect() {
             "status" in payload.new &&
             payload.new.status === "active"
           ) {
-            router.push("/game");
+            goToGame(selectedTeam)
           }
         }
       )
@@ -34,7 +35,14 @@ export default function TeamSelect() {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [router, supabase]);
+  }, [router, selectedTeam, supabase]);
+
+  const goToGame = (teamid: string) => {
+    getUserId();
+    console.log(teamid)
+    
+    router.push(`/game/${teamid}`);
+  };
 
   const handleTeamSelect = (team: string) => {
     setSelectedTeam(team);
@@ -42,7 +50,7 @@ export default function TeamSelect() {
 
   const handlePlayClick = () => {
     if (selectedTeam) {
-      router.push("/game");
+      //router.push("/game");
     }
   };
 
@@ -64,9 +72,9 @@ export default function TeamSelect() {
       <div className="bg-white bg-opacity-20 mx-6 rounded-3xl p-6 mb-8">
         <div className="grid grid-cols-2 gap-4 mb-6">
           <button
-            onClick={() => handleTeamSelect("bears")}
+            onClick={() => handleTeamSelect("1")}
             className={`bg-white rounded-2xl p-8 transition-all ${
-              selectedTeam === "bears" ? "ring-4 ring-yellow-400" : ""
+              selectedTeam === "1" ? "ring-4 ring-yellow-400" : ""
             }`}
           >
             <div className="w-24 h-24 bg-gray-200 rounded-lg mx-auto flex items-center justify-center">
@@ -75,9 +83,9 @@ export default function TeamSelect() {
           </button>
 
           <button
-            onClick={() => handleTeamSelect("giants")}
+            onClick={() => handleTeamSelect("2")}
             className={`bg-white rounded-2xl p-8 transition-all ${
-              selectedTeam === "giants" ? "ring-4 ring-yellow-400" : ""
+              selectedTeam === "2" ? "ring-4 ring-yellow-400" : ""
             }`}
           >
             <div className="w-24 h-24 bg-gray-200 rounded-lg mx-auto flex items-center justify-center">
