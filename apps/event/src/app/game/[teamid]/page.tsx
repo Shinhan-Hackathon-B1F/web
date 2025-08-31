@@ -107,11 +107,13 @@ export default function Game({
       .limit(1)
       .single();
   
-    if (data?.cheer_average >= maxAverage?.cheer_average) {
-      router.push('/result-win');
-    } else {
-      router.push('/result-lose');
-    }
+    const isWin = data?.cheer_average >= maxAverage?.cheer_average
+    
+    sessionStorage.setItem('gameResult', JSON.stringify({ 
+      outcome: isWin ? 'win' : 'lose',
+      timestamp: Date.now() 
+    }));
+    router.push('/result');
   };
 
   // 남은 시간 계산 타이머
