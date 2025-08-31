@@ -80,7 +80,7 @@ export default function Game({
             "status" in payload.new &&
             payload.new.status === "finished"
           ) {
-            router.push("/result");
+            checkWinnerAndRedirect()
           }
         }
       )
@@ -89,7 +89,30 @@ export default function Game({
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [supabase, router]);
+  }, [supabase, router, params]);
+
+  const checkWinnerAndRedirect = async () => {
+    const { teamid } = await params;
+
+    const { data } = await supabase
+      .from('team_stats_view')
+      .select('cheer_average')
+      .eq('id', teamid)
+      .single();
+  
+    const { data: maxAverage } = await supabase
+      .from('team_stats_view')
+      .select('cheer_average')
+      .order('cheer_average', { ascending: false })
+      .limit(1)
+      .single();
+  
+    if (data?.cheer_average >= maxAverage?.cheer_average) {
+      router.push('/result-win');
+    } else {
+      router.push('/result-lose');
+    }
+  };
 
   // 남은 시간 계산 타이머
   useEffect(() => {
