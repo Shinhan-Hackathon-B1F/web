@@ -37,8 +37,37 @@ export default function TeamSelect() {
     };
   }, [router, selectedTeam, supabase]);
 
+  const joinTeam = async (teamId: string, sessionId: string) => {
+    const { data: existingParticipant } = await supabase
+      .from('participants')
+      .select('id')
+      .eq('session_id', sessionId)
+      .eq('event_id', 1)
+      .single();
+  
+    if (existingParticipant) {
+      console.log('이미 참가한 사용자입니다.');
+      return;
+    }
+  
+    // 새 참가자 등록
+    const { error } = await supabase
+      .from('participants')
+      .insert({
+        event_id: 1,
+        team_id: teamId,
+        session_id: sessionId,
+      });
+  
+    if (error) {
+      console.error('참가 등록 에러:', error);
+    } else {
+      console.log(`팀 ${teamId}에 참가 완료!`);
+    }
+  };
+
   const goToGame = (teamid: string) => {
-    getUserId();
+    joinTeam(selectedTeam, getUserId())
     router.push(`/game/${teamid}`);
   };
 
