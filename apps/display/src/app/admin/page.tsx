@@ -50,14 +50,17 @@ export default function Admin() {
 
   const startEvent = async () => {
     const duration = 10000; // 10초
-    const finishTime = new Date(Date.now() + duration);
-
+    
     const { error } = await supabase
       .from("events")
       .update({
         status: "active",
-        started_at: new Date().toISOString(),
-        finished_at: finishTime.toISOString(),
+        started_at:
+          new Date().toLocaleString("sv-SE", { timeZone: "Asia/Seoul" }) + "Z",
+        finished_at:
+          new Date(Date.now() + duration).toLocaleString("sv-SE", {
+            timeZone: "Asia/Seoul",
+          }) + "Z",
       })
       .eq("id", 1);
 
