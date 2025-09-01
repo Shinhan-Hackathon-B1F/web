@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { createClient } from "../../../../../shared/utils/supabase/client";
 import { Event, Team } from "../../../../../shared/types";
+import Gauge from "./components/Gauge";
 
 export default function Display() {
   const supabase = createClient();
@@ -23,21 +24,7 @@ export default function Display() {
       .eq("id", 1)
       .single();
 
-    const { data: team1Data } = await supabase
-      .from("team_stats_view")
-      .select("cheer_average")
-      .eq("id", 1)
-      .single();
-
-    const { data: team2Data } = await supabase
-      .from("team_stats_view")
-      .select("cheer_average")
-      .eq("id", 2)
-      .single();
-
     setEvent(eventData);
-    setTeam1(team1Data?.cheer_average | 0);
-    setTeam2(team2Data?.cheer_average | 0);
   };
 
   // 팀 통계 데이터 가져오기
@@ -65,7 +52,7 @@ export default function Display() {
 
     const newTimer = setTimeout(() => {
       fetchTeamStats();
-    }, 200);
+    }, 250);
 
     setUpdateTimer(newTimer);
   };
@@ -172,15 +159,17 @@ export default function Display() {
       )}
 
       {/* 팀별 점수 */}
-      <div className="grid grid-cols-2 gap-12">
+      <div className="flex flex-row gap-12">
         <div>
-          두산
+          SSG
           <div>{team1}</div>
+          <Gauge score={team1} maxScore={100} />
         </div>
 
         <div>
-          롯데
+          두산
           <div>{team2}</div>
+          <Gauge score={team2} maxScore={100} />
         </div>
       </div>
     </div>
