@@ -49,36 +49,49 @@ export default function Admin() {
   };
 
   const startEvent = async () => {
-    const duration = 10000; // 10초
+    const selectingDuration = 20000; // 20초
+    const activeDuration = 10000; // 10초  
+    const totalDuration = selectingDuration + activeDuration; // 30초
     
+    const now = new Date();
+    const finishedAt = new Date(now.getTime() + totalDuration);
     const { error } = await supabase
-      .from("events")
-      .update({
-        status: "active",
-        started_at:
-          new Date().toLocaleString("sv-SE", { timeZone: "Asia/Seoul" }) + "Z",
-        finished_at:
-          new Date(Date.now() + duration).toLocaleString("sv-SE", {
-            timeZone: "Asia/Seoul",
-          }) + "Z",
-      })
-      .eq("id", 1);
-
+    .from("events")
+    .update({
+      status: "selecting",
+      started_at: now.toISOString(), // UTC 기준
+      finished_at: finishedAt.toISOString(), // UTC 기준
+    })
+    .eq("id", 1);
+  
     if (error) {
       console.error("이벤트 업데이트 오류:", error);
       return;
     }
-
+  
+    // 20초 후 active 상태로 변경
+    setTimeout(async () => {
+      const { error } = await supabase
+        .from("events")
+        .update({ status: "active" })
+        .eq("id", 1);
+  
+      if (error) {
+        console.error("선택시간 종료 오류:", error);
+      }
+    }, selectingDuration);
+  
+    // 30초 후 (20초 selecting + 10초 active) finished 상태로 변경
     setTimeout(async () => {
       const { error } = await supabase
         .from("events")
         .update({ status: "finished" })
         .eq("id", 1);
-
+  
       if (error) {
         console.error("이벤트 종료 오류:", error);
       }
-    }, duration);
+    }, totalDuration);
   };
 
   return (
