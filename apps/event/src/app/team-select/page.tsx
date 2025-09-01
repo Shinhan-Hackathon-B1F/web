@@ -3,11 +3,20 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { createClient } from "../../../../../shared/utils/supabase/client";
 import { getUserId } from "@/utils/userIdentifier";
+import { Event } from "../../../../../shared/types";
 
 export default function TeamSelect() {
   const router = useRouter();
   const supabase = createClient();
   const [selectedTeam, setSelectedTeam] = useState("");
+
+  const [event, setEvent] = useState<Event | null>(null);
+  const [timeRemaining, setTimeRemaining] = useState(0);
+
+  // 컴포넌트 마운트 시 이벤트 데이터 가져오기
+  useEffect(() => {
+    fetchEventData();
+  }, []);
 
   useEffect(() => {
     const channel = supabase
@@ -20,13 +29,16 @@ export default function TeamSelect() {
           table: "events",
         },
         (payload) => {
-          console.log(payload);
           if (
             payload.new &&
             "status" in payload.new &&
             payload.new.status === "active"
           ) {
-            goToGame(selectedTeam)
+            goToGame(selectedTeam);
+          }
+          // 이벤트 데이터가 업데이트되면 상태도 업데이트
+          if (payload.new) {
+            setEvent(payload.new as Event);
           }
         }
       )
@@ -37,37 +49,101 @@ export default function TeamSelect() {
     };
   }, [router, selectedTeam, supabase]);
 
+  // 남은 시간 계산 타이머
+  useEffect(() => {
+    let timer: NodeJS.Timeout | null = null;
+
+    if (event?.status === "selecting" && event?.finished_at) {
+      const updateTimer = () => {
+        const finishTime = new Date(event.finished_at!).getTime();
+        const now = new Date().getTime();
+        console.log(finishTime, now);
+        const remaining = Math.max(
+          0,
+          Math.ceil((finishTime - now) / 1000 - 10)
+        );
+
+        console.log(remaining);
+
+        setTimeRemaining(remaining);
+
+        // 시간이 끝나면 타이머 정리
+        if (remaining <= 0 && timer) {
+          clearInterval(timer);
+        }
+      };
+
+      updateTimer(); // 즉시 실행
+      timer = setInterval(updateTimer, 1000);
+    } else {
+      setTimeRemaining(0);
+    }
+
+    return () => {
+      if (timer) {
+        clearInterval(timer);
+      }
+    };
+  }, [event?.status, event?.finished_at]);
+
+  // 시간을 MM:SS 형태로 포맷팅하는 함수
+  const formatTime = (seconds: number) => {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes.toString().padStart(2, "0")}:${remainingSeconds
+      .toString()
+      .padStart(2, "0")}`;
+  };
+
   const joinTeam = async (teamId: string, sessionId: string) => {
     const { data: existingParticipant } = await supabase
-      .from('participants')
-      .select('id')
-      .eq('session_id', sessionId)
-      .eq('event_id', 1)
+      .from("participants")
+      .select("id")
+      .eq("session_id", sessionId)
+      .eq("event_id", 1)
       .single();
-  
+
     if (existingParticipant) {
-      console.log('이미 참가한 사용자입니다.');
+      console.log("이미 참가한 사용자입니다.");
       return;
     }
-  
+
     // 새 참가자 등록
-    const { error } = await supabase
-      .from('participants')
-      .insert({
-        event_id: 1,
-        team_id: teamId,
-        session_id: sessionId,
-      });
-  
+    const { error } = await supabase.from("participants").insert({
+      event_id: 1,
+      team_id: teamId,
+      session_id: sessionId,
+    });
+
     if (error) {
-      console.error('참가 등록 에러:', error);
+      console.error("참가 등록 에러:", error);
     } else {
       console.log(`팀 ${teamId}에 참가 완료!`);
     }
   };
 
+  const fetchEventData = async () => {
+    try {
+      const { data: eventData, error } = await supabase
+        .from("events")
+        .select("*")
+        .eq("id", 1)
+        .single();
+
+      if (error) {
+        console.error("이벤트 데이터 가져오기 에러:", error);
+        return;
+      }
+
+      console.log("가져온 이벤트 데이터:", eventData);
+      setEvent(eventData);
+    } catch (error) {
+      console.error("fetchEventData 에러:", error);
+    }
+  };
+
   const goToGame = (teamid: string) => {
-    joinTeam(selectedTeam, getUserId())
+    joinTeam(selectedTeam, getUserId());
     router.push(`/game/${teamid}`);
   };
 
@@ -85,6 +161,16 @@ export default function TeamSelect() {
     <div className="max-w-sm mx-auto min-h-screen flex flex-col text-white">
       {/* Header */}
       <div className="text-center pt-16 pb-32">
+        {/* 타이머 표시 */}
+        {event?.status === "selecting" && timeRemaining > 0 && (
+          <div className="mt-4">
+            <div className="bg-red-600 bg-opacity-90 rounded-xl px-4 py-2 inline-block">
+              <p className="text-sm font-medium">남은 시간</p>
+              <p className="text-2xl font-bold">{formatTime(timeRemaining)}</p>
+            </div>
+          </div>
+        )}
+
         <h1 className="text-2xl font-bold">응원지수를 높여라</h1>
       </div>
 
