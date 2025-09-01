@@ -2,7 +2,7 @@
 export interface Event {
   id: number;
   name: string;
-  status: "team_selection" | "active" | "finished";
+  status: "selecting" | "active" | "finished";
   duration_seconds: number;
   started_at: string | null;
   finished_at: string | null;

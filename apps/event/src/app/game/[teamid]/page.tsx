@@ -50,8 +50,6 @@ export default function Game({
       .eq("id", 1)
       .single();
 
-    console.log(eventData)
-
     setEvent(eventData);
   };
 
@@ -108,7 +106,7 @@ export default function Game({
       .single();
   
     const isWin = data?.cheer_average >= maxAverage?.cheer_average
-    
+
     sessionStorage.setItem('gameResult', JSON.stringify({ 
       outcome: isWin ? 'win' : 'lose',
       timestamp: Date.now() 
@@ -123,10 +121,8 @@ export default function Game({
     if (event?.status === "active" && event?.finished_at) {
       const updateTimer = () => {
         const finishTime = new Date(event.finished_at!).getTime();
-        const now = Date.now();
+        const now = new Date().getTime()
         const remaining = Math.max(0, Math.ceil((finishTime - now) / 1000));
-        
-        console.log(remaining)
 
         setTimeRemaining(remaining);
 
