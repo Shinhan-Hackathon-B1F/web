@@ -53,13 +53,24 @@ const pretendard = localFont({
   variable: "--font-pretendard",
 });
 
+const digit = localFont({
+  src: [
+    {
+      path: "../../../../public/fonts/DigitalNumbers-Regular.ttf",
+      weight: "400",
+      style: "normal",
+    }
+  ],
+  variable: "--font-digit",
+});
+
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={`${kbo.variable} ${pretendard.variable}`}>
+    <html lang="en" className={`${kbo.variable} ${pretendard.variable} ${digit.variable}`}>
       <body>{children}</body>
     </html>
   )

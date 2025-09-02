@@ -1,14 +1,21 @@
 "use client";
 
 import { createClient } from "../../../../shared/utils/supabase/client";
-import { useEffect } from "react";
-import Link from "next/link";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { Event } from "../../../../shared/types";
 
 export default function Display() {
   const supabase = createClient();
   const router = useRouter();
+
+  const [event, setEvent] = useState<Event | null>(null);
+  const [timeRemaining, setTimeRemaining] = useState(0);
+
+  useEffect(() => {
+    fetchEventData();
+  }, []);
 
   useEffect(() => {
     const channel = supabase
@@ -21,7 +28,10 @@ export default function Display() {
           table: "events",
         },
         (payload) => {
-          console.log(payload);
+          if (payload.new) {
+            setEvent(payload.new as Event);
+          }
+
           if (
             payload.new &&
             "status" in payload.new &&
@@ -38,6 +48,69 @@ export default function Display() {
     };
   }, [supabase]);
 
+  // 남은 시간 계산 타이머
+  useEffect(() => {
+    let timer: NodeJS.Timeout | null = null;
+
+    if (event?.status === "selecting" && event?.finished_at) {
+      const updateTimer = () => {
+        const finishTime = new Date(event.finished_at!).getTime();
+        const now = new Date().getTime();
+        console.log(finishTime, now);
+        const remaining = Math.max(
+          0,
+          Math.ceil((finishTime - now) / 1000 - 10)
+        );
+
+        console.log(remaining);
+
+        setTimeRemaining(remaining);
+
+        // 시간이 끝나면 타이머 정리
+        if (remaining <= 0 && timer) {
+          clearInterval(timer);
+        }
+      };
+
+      updateTimer(); // 즉시 실행
+      timer = setInterval(updateTimer, 1000);
+    } else {
+      setTimeRemaining(0);
+    }
+
+    return () => {
+      if (timer) {
+        clearInterval(timer);
+      }
+    };
+  }, [event?.status, event?.finished_at]);
+
+  // 시간을 포맷팅하는 함수
+  const formatTime = (seconds: number) => {
+    const remainingSeconds = seconds % 60;
+    return `${remainingSeconds.toString()}`;
+  };
+
+  const fetchEventData = async () => {
+    try {
+      const { data: eventData, error } = await supabase
+        .from("events")
+        .select("*")
+        .eq("id", 1)
+        .single();
+
+      if (error) {
+        console.error("이벤트 데이터 가져오기 에러:", error);
+        return;
+      }
+
+      console.log("가져온 이벤트 데이터:", eventData);
+      setEvent(eventData);
+    } catch (error) {
+      console.error("fetchEventData 에러:", error);
+    }
+  };
+
   return (
     <div className="h-screen bg-gradient-to-r from-[#00226B] to-[#001AC3] text-white relative overflow-hidden">
       {/* Background decorative elements */}
@@ -47,9 +120,16 @@ export default function Display() {
       </div>
 
       {/* Timer */}
+
       <div className="absolute top-8 right-8 xl:top-24 xl:right-24 flex gap-2">
-        <div className="bg-black bg-opacity-70 px-4 py-2 rounded-lg">
-          <span className="text-2xl font-bold">120</span>
+        <div className="bg-[#121212] p-6 rounded-2xl">
+          <div className="relative inline-block">
+            <h1 className="font-digit text-6xl tracking-[-4.5%] text-gray-800">00</h1>
+            <span className="absolute top-0 right-0 font-digit text-6xl tracking-[-4.5%]">
+            {formatTime(timeRemaining)}
+            </span>
+          </div>
+          
           <span className="text-sm ml-1">초</span>
         </div>
       </div>
