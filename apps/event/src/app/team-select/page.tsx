@@ -57,14 +57,14 @@ export default function TeamSelect() {
   useEffect(() => {
     let timer: NodeJS.Timeout | null = null;
 
-    if (event?.status === "selecting" && event?.finished_at) {
+    if ((event?.status === "selecting" || event?.status === "active") && event?.finished_at) {
       const updateTimer = () => {
         const finishTime = new Date(event.finished_at!).getTime();
         const now = new Date().getTime();
         console.log(finishTime, now);
         const remaining = Math.max(
           0,
-          Math.ceil((finishTime - now) / 1000 - 10)
+          Math.ceil((finishTime - now) / 1000 - 12)
         );
 
         console.log(remaining);

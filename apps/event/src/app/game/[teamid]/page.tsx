@@ -4,6 +4,7 @@ import { getUserId } from "@/utils/userIdentifier";
 import { createClient } from "../../../../../../shared/utils/supabase/client";
 import { useRouter } from "next/navigation";
 import { Event } from "../../../../../../shared/types"
+import Dimmed from "@/app/team-select/components/dimmed";
 
 export default function Game({
   params,
@@ -20,7 +21,11 @@ export default function Game({
   });
 
   const [event, setEvent] = useState<Event | null>(null);
-  const [timeRemaining, setTimeRemaining] = useState(0);
+  const [timeRemaining, setTimeRemaining] = useState(-1);
+
+  useEffect(() => {
+    fetchEventData();
+  }, []);
 
   useEffect(() => {
     const initGame = async () => {
@@ -34,9 +39,6 @@ export default function Game({
       });
 
       console.log(`User ${userId} joined team ${teamid}`);
-      
-      // 초기 이벤트 데이터 로딩
-      await fetchEventData();
     };
 
     initGame();
@@ -118,12 +120,13 @@ export default function Game({
   useEffect(() => {
     let timer: NodeJS.Timeout | null = null;
 
-    if (event?.status === "active" && event?.finished_at) {
+    if ((event?.status === "active" || event?.status === "finished") && event?.finished_at) {
       const updateTimer = () => {
         const finishTime = new Date(event.finished_at!).getTime();
         const now = new Date().getTime()
-        const remaining = Math.max(0, Math.ceil((finishTime - now) / 1000));
+        const remaining = Math.max(0, Math.ceil((finishTime - now) / 1000 - 1));
 
+        console.log(remaining)
         setTimeRemaining(remaining);
 
         // 시간이 끝나면 타이머 정리
@@ -166,7 +169,10 @@ export default function Game({
   const isGameActive = event?.status === "active";
 
   return (
-    <div>
+    <div className="max-w-screen mx-auto min-h-screen flex flex-col text-white">
+      {event?.status === "active" && timeRemaining % 60 === 0 && (
+        <Dimmed text="stop"></Dimmed>
+      )}
       <h1>Game Page</h1>
       <p>Team ID: {gameData.teamid}</p>
       <p>User ID: {gameData.userId}</p>
