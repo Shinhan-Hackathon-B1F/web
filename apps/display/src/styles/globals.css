@@ -8,6 +8,7 @@
 @theme {
   --font-kbo: var(--font-kbo), sans-serif;
   --font-pretendard: var(--font-pretendard), sans-serif;
+  --font-digit: var(--font-digit), sans-serif;
 }
 
 @media (prefers-color-scheme: dark) {

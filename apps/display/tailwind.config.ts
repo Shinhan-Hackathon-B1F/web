@@ -11,6 +11,7 @@ const config: Config = {
       fontFamily: {
         kbo: ["var(--font-kbo)"],
         pretendard: ["var(--font-pretendard)"],
+        digit: ["var(--font-digit)"],
       },
     },
   },
