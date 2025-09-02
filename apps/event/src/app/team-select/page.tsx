@@ -34,7 +34,9 @@ export default function TeamSelect() {
             "status" in payload.new &&
             payload.new.status === "active"
           ) {
-            goToGame(selectedTeam);
+            if (selectedTeam) {
+              goToGame(selectedTeam);
+            }
           }
           // 이벤트 데이터가 업데이트되면 상태도 업데이트
           if (payload.new) {
@@ -86,13 +88,10 @@ export default function TeamSelect() {
     };
   }, [event?.status, event?.finished_at]);
 
-  // 시간을 MM:SS 형태로 포맷팅하는 함수
+  // 시간을 포맷팅하는 함수
   const formatTime = (seconds: number) => {
-    const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
-    return `${minutes.toString().padStart(2, "0")}:${remainingSeconds
-      .toString()
-      .padStart(2, "0")}`;
+    return `${remainingSeconds.toString()}`;
   };
 
   const joinTeam = async (teamId: string, sessionId: string) => {
@@ -153,12 +152,14 @@ export default function TeamSelect() {
 
   const handlePlayClick = () => {
     if (selectedTeam) {
-      //router.push("/game");
+      goToGame(selectedTeam);
+    } else {
+      alert("팀을 선택해주세요");
     }
   };
 
   return (
-    <div className="max-w-sm mx-auto min-h-screen flex flex-col text-white">
+    <div className="max-w-screen mx-auto min-h-screen flex flex-col text-white">
       {/* Header */}
       <div className="text-center pt-16 pb-32">
         {/* 타이머 표시 */}
@@ -171,7 +172,9 @@ export default function TeamSelect() {
           </div>
         )}
 
-        <h1 className="text-2xl font-bold">응원지수를 높여라</h1>
+        <h1 className="absolute right-[20px] top-[16px] font-kbo text-[16px] font-bold">
+          응원지수를 높여라
+        </h1>
       </div>
 
       {/* Instruction */}
@@ -182,7 +185,7 @@ export default function TeamSelect() {
       </div>
 
       {/* Team Selection Cards */}
-      <div className="bg-white bg-opacity-20 mx-6 rounded-3xl p-6 mb-8">
+      <div className="absolute bottom-0 left-0 right-0 bg-white bg-opacity-20 rounded-t-3xl p-6">
         <div className="grid grid-cols-2 gap-4 mb-6">
           <button
             onClick={() => handleTeamSelect("1")}
@@ -208,17 +211,25 @@ export default function TeamSelect() {
         </div>
 
         {/* Play Button */}
-        <button
-          onClick={handlePlayClick}
-          disabled={!selectedTeam}
-          className={`w-full py-4 rounded-2xl font-black text-xl transition-all ${
-            selectedTeam
-              ? "bg-black text-white"
-              : "bg-gray-400 text-gray-600 cursor-not-allowed"
-          }`}
-        >
-          PLAY
-        </button>
+        <div className="p-6 pb-8">
+          <button
+            disabled={event?.status !== "active"}
+            onClick={event?.status === "active" ? handlePlayClick : undefined}
+            className={`px-6 py-3 rounded-lg font-semibold text-lg transition-colors
+              ${
+                event?.status === "active"
+                  ? "bg-black text-white hover:bg-gray-800"
+                  : "bg-gray-400 text-gray-600 cursor-not-allowed"
+              }
+  `}
+          >
+            {event?.status === "selecting" && timeRemaining >= 0
+              ? `${formatTime(timeRemaining)}초 후에 시작됩니다`
+              : event?.status === "active"
+              ? "참여하기"
+              : "게임 시간이 아닙니다"}
+          </button>
+        </div>
       </div>
     </div>
   );

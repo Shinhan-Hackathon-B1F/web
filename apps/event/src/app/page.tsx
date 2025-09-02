@@ -10,7 +10,7 @@ export default function CheerEvent() {
   };
 
   return (
-    <div className="max-w-sm mx-auto flex flex-col text-white">
+    <div className="max-w-sm mx-auto min-h-screen flex flex-col text-white">
       {/* Header */}
       <div className="text-center px-6 mt-16">
         <div className="text-lg font-bold mb-2">프로 야구 응원 이벤트</div>
