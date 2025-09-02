@@ -13,9 +13,7 @@ export default function TeamSelect() {
   const [selectedTeam, setSelectedTeam] = useState("");
 
   const [event, setEvent] = useState<Event | null>(null);
-  const [timeRemaining, setTimeRemaining] = useState(0);
-
-  const [isOpen, setIsOpen] = useState(false);
+  const [timeRemaining, setTimeRemaining] = useState(-1);
 
   // 컴포넌트 마운트 시 이벤트 데이터 가져오기
   useEffect(() => {
@@ -164,7 +162,10 @@ export default function TeamSelect() {
 
   return (
     <div className="max-w-screen mx-auto min-h-screen flex flex-col text-white">
-      <Dimmed isOpen={isOpen} onClose={() => setIsOpen(false)}></Dimmed>
+      {event?.status === "selecting" && timeRemaining % 60 <= 3 && timeRemaining % 60 >= 0 && (
+        <Dimmed text={formatTime(timeRemaining)}></Dimmed>
+      )}
+
       {/* Header */}
       <div className="text-center pt-16 pb-24">
         <h1 className="absolute right-[20px] top-[16px] font-kbo text-[16px] font-bold">
@@ -211,7 +212,8 @@ export default function TeamSelect() {
                 selectedTeam === "2"
                   ? "drop-shadow-[0_0_8px_rgb(30_64_175)]"
                   : ""
-              }`}>
+              }`}
+            >
               <Image
                 src={`/assets/buttons/team=두산, state=${
                   selectedTeam === "2" ? "focus" : "non"

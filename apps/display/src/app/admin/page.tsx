@@ -49,9 +49,9 @@ export default function Admin() {
   };
 
   const startEvent = async () => {
-    const selectingDuration = 20000; // 20초
+    const selectingDuration = 21000; // 21초
     const activeDuration = 10000; // 10초  
-    const totalDuration = selectingDuration + activeDuration; // 30초
+    const totalDuration = selectingDuration + activeDuration; // 31초
     
     const now = new Date();
     const finishedAt = new Date(now.getTime() + totalDuration);
@@ -69,7 +69,7 @@ export default function Admin() {
       return;
     }
   
-    // 20초 후 active 상태로 변경
+    // 21초 후 active 상태로 변경
     setTimeout(async () => {
       const { error } = await supabase
         .from("events")
