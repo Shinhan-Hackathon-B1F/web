@@ -31,3 +31,8 @@ body {
   background-attachment: fixed;
   min-height: 100vh;
 }
+
+@font-face {
+  font-family: "KBO-Dia-Gothic_bold.ttf";
+  src: url("../../../../public/fonts/KBO-Dia-Gothic_bold.ttf");
+}
