@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { createClient } from "../../../../../shared/utils/supabase/client";
 import { getUserId } from "@/utils/userIdentifier";
 import { Event } from "../../../../../shared/types";
+import Image from "next/image";
+import Dimmed from "./components/dimmed";
 
 export default function TeamSelect() {
   const router = useRouter();
@@ -12,6 +14,8 @@ export default function TeamSelect() {
 
   const [event, setEvent] = useState<Event | null>(null);
   const [timeRemaining, setTimeRemaining] = useState(0);
+
+  const [isOpen, setIsOpen] = useState(false);
 
   // 컴포넌트 마운트 시 이벤트 데이터 가져오기
   useEffect(() => {
@@ -160,75 +164,87 @@ export default function TeamSelect() {
 
   return (
     <div className="max-w-screen mx-auto min-h-screen flex flex-col text-white">
+      <Dimmed isOpen={isOpen} onClose={() => setIsOpen(false)}></Dimmed>
       {/* Header */}
-      <div className="text-center pt-16 pb-32">
-        {/* 타이머 표시 */}
-        {event?.status === "selecting" && timeRemaining > 0 && (
-          <div className="mt-4">
-            <div className="bg-red-600 bg-opacity-90 rounded-xl px-4 py-2 inline-block">
-              <p className="text-sm font-medium">남은 시간</p>
-              <p className="text-2xl font-bold">{formatTime(timeRemaining)}</p>
-            </div>
-          </div>
-        )}
-
+      <div className="text-center pt-16 pb-24">
         <h1 className="absolute right-[20px] top-[16px] font-kbo text-[16px] font-bold">
           응원지수를 높여라
         </h1>
       </div>
 
       {/* Instruction */}
-      <div className="text-center mb-32">
-        <div className="bg-blue-900 bg-opacity-80 rounded-2xl px-8 py-4 mx-6">
-          <p className="text-lg font-medium">응원하는 팀을 선택해주세요</p>
+      <div className="text-center mb-30 w-70 self-center">
+        <div className="bg-black/40 rounded-2xl px-6 py-4">
+          <p className="font-kbo text-xl font-medium">
+            응원하는 팀을 선택해주세요
+          </p>
         </div>
       </div>
 
       {/* Team Selection Cards */}
-      <div className="absolute bottom-0 left-0 right-0 bg-white bg-opacity-20 rounded-t-3xl p-6">
-        <div className="grid grid-cols-2 gap-4 mb-6">
-          <button
-            onClick={() => handleTeamSelect("1")}
-            className={`bg-white rounded-2xl p-8 transition-all ${
-              selectedTeam === "1" ? "ring-4 ring-yellow-400" : ""
-            }`}
-          >
-            <div className="w-24 h-24 bg-gray-200 rounded-lg mx-auto flex items-center justify-center">
-              <span className="text-sm text-gray-600">Bears Logo</span>
-            </div>
-          </button>
+      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-b from-white to-white/0 rounded-t-3xl shadow-inner border-2">
+        <div className="bg-white/80 p-5 rounded-t-3xl">
+          <div className="grid grid-cols-2 gap-4 mb-4">
+            <button
+              onClick={() => handleTeamSelect("1")}
+              className={`relative rounded-2xl bg-gradient-to-b from-white to-[#ECF7FF] flex items-center justify-center aspect-square shadow-[inset_0_0_4px_#012DB229] drop-shadow-[0_0_8px_#425AA666] ${
+                selectedTeam === "1"
+                  ? "drop-shadow-[0_0_8px_rgb(30_64_175)]"
+                  : ""
+              }`}
+            >
+              <Image
+                src={`/assets/buttons/team=SSG, state=${
+                  selectedTeam === "1" ? "focus" : "non"
+                }.svg`}
+                alt="프레임"
+                width={120}
+                height={120}
+                priority={true}
+                className="object-contain"
+              />
+            </button>
 
-          <button
-            onClick={() => handleTeamSelect("2")}
-            className={`bg-white rounded-2xl p-8 transition-all ${
-              selectedTeam === "2" ? "ring-4 ring-yellow-400" : ""
-            }`}
-          >
-            <div className="w-24 h-24 bg-gray-200 rounded-lg mx-auto flex items-center justify-center">
-              <span className="text-sm text-gray-600">Giants Logo</span>
-            </div>
-          </button>
-        </div>
+            <button
+              onClick={() => handleTeamSelect("2")}
+              className={`relative rounded-2xl bg-gradient-to-b from-white to-[#ECF7FF] flex items-center justify-center aspect-square shadow-[inset_0_0_4px_#012DB229] drop-shadow-[0_0_8px_#425AA666] ${
+                selectedTeam === "2"
+                  ? "drop-shadow-[0_0_8px_rgb(30_64_175)]"
+                  : ""
+              }`}>
+              <Image
+                src={`/assets/buttons/team=두산, state=${
+                  selectedTeam === "2" ? "focus" : "non"
+                }.svg`}
+                alt="프레임"
+                width={120}
+                height={120}
+                priority={true}
+                className="object-contain"
+              />
+            </button>
+          </div>
 
-        {/* Play Button */}
-        <div className="p-6 pb-8">
-          <button
-            disabled={event?.status !== "active"}
-            onClick={event?.status === "active" ? handlePlayClick : undefined}
-            className={`px-6 py-3 rounded-lg font-semibold text-lg transition-colors
+          {/* Play Button */}
+          <div className="pb-8">
+            <button
+              disabled={event?.status !== "active"}
+              onClick={event?.status === "active" ? handlePlayClick : undefined}
+              className={`w-full py-4 rounded-2xl font-pretendard font-black text-2xl transition-colors
               ${
                 event?.status === "active"
                   ? "bg-black text-white hover:bg-gray-800"
-                  : "bg-gray-400 text-gray-600 cursor-not-allowed"
+                  : "bg-[#D1D1D1] text-gray-400 cursor-not-allowed font-semibold text-lg"
               }
   `}
-          >
-            {event?.status === "selecting" && timeRemaining >= 0
-              ? `${formatTime(timeRemaining)}초 후에 시작됩니다`
-              : event?.status === "active"
-              ? "참여하기"
-              : "게임 시간이 아닙니다"}
-          </button>
+            >
+              {event?.status === "selecting" && timeRemaining >= 0
+                ? `${formatTime(timeRemaining)}초 후에 시작됩니다`
+                : event?.status === "active"
+                ? "참여하기"
+                : "게임 시간이 아닙니다"}
+            </button>
+          </div>
         </div>
       </div>
     </div>
