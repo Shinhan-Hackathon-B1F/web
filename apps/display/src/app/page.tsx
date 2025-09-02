@@ -104,9 +104,9 @@ export default function Display() {
       </div>
 
       {/* Bottom section */}
-      <div className="absolute bottom-0 left-[-134.58px] flex">
+      <div className="absolute bottom-0 left-[-50px] flex">
         {/* QR Code - left bottom */}
-        <div className="w-[768px] h-[624px]">
+        <div className="relative w-[768px] h-[624px]">
           <Image
             src="/assets/Group 163.svg"
             alt="qr"
@@ -118,12 +118,12 @@ export default function Display() {
       </div>
 
       {/* Cans decoration - fixed to bottom right */}
-      <div className="absolute bottom-0 right-[-325.21px] flex">
+      <div className="absolute bottom-0 right-[-20px] flex">
         {/* QR Code - left bottom */}
-        <div className="w-[1058px] h-[809px]">
+        <div className="relative w-[1058px] h-[809px]">
           <Image
             src="/assets/Group 164.svg"
-            alt="qr"
+            alt="cass"
             fill
             priority={true}
             className="object-contain"
