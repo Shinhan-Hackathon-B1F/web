@@ -5,9 +5,15 @@ import LoseComponent from "./components/LoseComponent";
 
 function ResultContent({
   outcome,
+  teamId,
+  myScore,
+  teamScore,
   isLoading,
 }: {
   outcome: string | null;
+  teamId: number | null;
+  myScore: number | null;
+  teamScore: number | null;
   isLoading: boolean;
 }) {
   if (isLoading) {
@@ -19,9 +25,13 @@ function ResultContent({
   }
 
   if (outcome === "win") {
-    return <WinComponent />;
+    return (
+      <WinComponent teamId={teamId} myScore={myScore} teamScore={teamScore} />
+    );
   } else if (outcome === "lose") {
-    return <LoseComponent />;
+    return (
+      <LoseComponent teamId={teamId} myScore={myScore} teamScore={teamScore} />
+    );
   }
 
   // 이미 종료된 게임 화면
@@ -43,6 +53,9 @@ function ResultContent({
 
 export default function GameResult() {
   const [outcome, setOutcome] = useState<string | null>(null);
+  const [teamId, setTeamId] = useState<number | null>(null);
+  const [myScore, setMyScore] = useState<number | null>(null);
+  const [teamScore, setTeamScore] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -50,18 +63,28 @@ export default function GameResult() {
     console.log(result);
 
     if (result) {
-      const { outcome, timestamp } = JSON.parse(result);
+      const { outcome, teamId, myScore, teamScore, timestamp } =
+        JSON.parse(result);
       const elapsed = Date.now() - timestamp;
 
       // 5분(300초) 체크
       if (elapsed < 5 * 60 * 1000) {
         setOutcome(outcome);
+        setTeamId(teamId);
+        setMyScore(myScore);
+        setTeamScore(teamScore);
       } else {
         sessionStorage.removeItem("gameResult");
         setOutcome(null);
+        setTeamId(null);
+        setMyScore(null);
+        setTeamScore(null);
       }
     } else {
       setOutcome(null);
+      setTeamId(null);
+      setMyScore(null);
+      setTeamScore(null);
     }
 
     setIsLoading(false);
@@ -69,7 +92,7 @@ export default function GameResult() {
 
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      <ResultContent outcome={outcome} isLoading={isLoading} />
+      <ResultContent outcome={outcome} teamId={teamId} myScore={myScore} teamScore={teamScore} isLoading={isLoading}  />
     </Suspense>
   );
 }
