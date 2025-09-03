@@ -3,19 +3,21 @@ import Image from "next/image";
 import Link from "next/link";
 
 interface WinComponentProps {
-  teamId: number | null;
+  teamid: number | null;
   myScore: number | null;
   teamScore: number | null;
 }
 
 export default function WinComponent({
-  teamId,
+  teamid,
   myScore,
   teamScore,
 }: WinComponentProps) {
   const handleFormAccess = () => {
     sessionStorage.setItem("winner_verified", "true");
   };
+
+  console.log(teamid)
 
   return (
     <div className="max-w-screen min-h-screen flex flex-col text-white bg-gradient-to-b from-[#0061C3] to-[#0036A2]">
@@ -28,7 +30,7 @@ export default function WinComponent({
       <div className="mix-blend-hard-light">
         <Image
           src={
-            teamId === 1
+            teamid == 1
               ? "/assets/result/result ssg.svg"
               : "/assets/result/result doosan.svg"
           }
@@ -44,7 +46,7 @@ export default function WinComponent({
       <div className="-mt-20 ml-12 z-50">
         <Image
           src={
-            teamId === 1
+            teamid == 1
               ? "/assets/result/ssg win.svg"
               : "/assets/result/doosan win.svg"
           }

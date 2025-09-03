@@ -5,13 +5,13 @@ import LoseComponent from "./components/LoseComponent";
 
 function ResultContent({
   outcome,
-  teamId,
+  teamid,
   myScore,
   teamScore,
   isLoading,
 }: {
   outcome: string | null;
-  teamId: number | null;
+  teamid: number | null;
   myScore: number | null;
   teamScore: number | null;
   isLoading: boolean;
@@ -26,11 +26,11 @@ function ResultContent({
 
   if (outcome === "win") {
     return (
-      <WinComponent teamId={teamId} myScore={myScore} teamScore={teamScore} />
+      <WinComponent teamid={teamid} myScore={myScore} teamScore={teamScore} />
     );
   } else if (outcome === "lose") {
     return (
-      <LoseComponent teamId={teamId} myScore={myScore} teamScore={teamScore} />
+      <LoseComponent teamid={teamid} myScore={myScore} teamScore={teamScore} />
     );
   }
 
@@ -53,7 +53,7 @@ function ResultContent({
 
 export default function GameResult() {
   const [outcome, setOutcome] = useState<string | null>(null);
-  const [teamId, setTeamId] = useState<number | null>(null);
+  const [teamid, setTeamId] = useState<number | null>(null);
   const [myScore, setMyScore] = useState<number | null>(null);
   const [teamScore, setTeamScore] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -63,14 +63,14 @@ export default function GameResult() {
     console.log(result);
 
     if (result) {
-      const { outcome, teamId, myScore, teamScore, timestamp } =
+      const { outcome, teamid, myScore, teamScore, timestamp } =
         JSON.parse(result);
       const elapsed = Date.now() - timestamp;
 
       // 5분(300초) 체크
       if (elapsed < 5 * 60 * 1000) {
         setOutcome(outcome);
-        setTeamId(teamId);
+        setTeamId(teamid);
         setMyScore(myScore);
         setTeamScore(teamScore);
       } else {
@@ -92,7 +92,7 @@ export default function GameResult() {
 
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      <ResultContent outcome={outcome} teamId={teamId} myScore={myScore} teamScore={teamScore} isLoading={isLoading}  />
+      <ResultContent outcome={outcome} teamid={teamid} myScore={myScore} teamScore={teamScore} isLoading={isLoading}  />
     </Suspense>
   );
 }

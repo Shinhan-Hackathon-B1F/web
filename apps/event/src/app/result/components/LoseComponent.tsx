@@ -4,13 +4,13 @@ import Image from "next/image";
 import Link from "next/link";
 
 interface LoseComponentProps {
-  teamId: number | null;
+  teamid: number | null;
   myScore: number | null;
   teamScore: number | null;
 }
 
 export default function LoseComponent({
-  teamId,
+  teamid,
   myScore,
   teamScore,
 }: LoseComponentProps) {
@@ -25,7 +25,7 @@ export default function LoseComponent({
       <div className="mix-blend-hard-light">
         <Image
           src={
-            teamId === 1
+            teamid === 1
               ? "/assets/result/result ssg.svg"
               : "/assets/result/result doosan.svg"
           }
@@ -41,7 +41,7 @@ export default function LoseComponent({
       <div className="-mt-20 ml-12 z-50">
         <Image
           src={
-            teamId === 1
+            teamid === 1
               ? "/assets/result/ssg lose.svg"
               : "/assets/result/doosan lose.svg"
           }
