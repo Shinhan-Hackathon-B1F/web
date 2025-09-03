@@ -17,6 +17,11 @@ export default function Display() {
   // 디바운싱을 위한 타이머
   const [updateTimer, setUpdateTimer] = useState<NodeJS.Timeout | null>(null);
 
+  useEffect(() => {
+    fetchData();
+    fetchTeamStats();
+  }, []);
+
   const fetchData = async () => {
     const { data: eventData } = await supabase
       .from("events")
@@ -57,11 +62,17 @@ export default function Display() {
     setUpdateTimer(newTimer);
   };
 
+  // 승리 팀 결정
+  const getWinningTeam = () => {
+    if (team1 > team2) return 1;
+    if (team2 > team1) return 2;
+    return null;
+  };
+
   // 실시간 구독
   useEffect(() => {
-    fetchData();
-
-    const channel = supabase.channel("event-channel").on(
+    const channel = supabase.channel("display-count")
+    .on(
       "postgres_changes",
       {
         event: "*",
@@ -70,9 +81,12 @@ export default function Display() {
       },
       (payload) => {
         console.log("이벤트 변경:", payload);
-        fetchData();
+        if (payload.new) {
+          setEvent(payload.new as Event);
+        }
       }
-    );
+    )
+    .subscribe();
 
     const teamChannel = supabase
       .channel("team-stats-updates")
@@ -108,34 +122,91 @@ export default function Display() {
       supabase.removeChannel(channel);
       supabase.removeChannel(teamChannel);
     };
-  }, []);
+  }, [supabase]);
+
+  console.log("Current state:", {
+    event,
+    team1,
+    team2,
+  });
 
   return (
-    <div className="min-h-screen mb-6 py-[40px] px-[50px] xl:py-[80px] xl:px-[100px]">
-      <div className="flex flex-row justify-between">
-        <div className="relative w-[357px] h-[40px] xl:w-[715px] xl:h-[80px] ">
+    <div className="relative min-h-screen mb-6 py-[40px] px-[50px] xl:py-[80px] xl:px-[100px]">
+      <video
+        className="absolute top-0 left-0 w-full h-full object-cover -z-10"
+        autoPlay
+        playsInline
+      >
+        <source src="/assets/카스 광고 영상.mp4" type="video/mp4" />
+      </video>
+      <div className="flex flex-row justify-between pb-[114px]">
+        <div className="relative w-[357px] h-[40px] xl:w-[715px] xl:h-[80px]">
           <Image
             src="/assets/Frame 5408_count.svg"
             alt="프레임"
             fill
             priority={true}
-            style={{ objectFit: 'contain', objectPosition: 'left top' }}
+            style={{ objectFit: "contain", objectPosition: "left top" }}
           />
         </div>
 
         <h1 className="text-4xl xl:text-[64px] font-kbo font-bold mb-4 leading-tight text-white">
-            응원 지수를 높여라
-          </h1>
+          응원 지수를 높여라
+        </h1>
       </div>
 
       {/* 팀별 점수 */}
       <div className="flex flex-row justify-between gap-12 ">
-        <div>
+        <div className="flex flex-row justify-between">
           <Gauge score={team1} maxScore={100} flip={true} />
+          <div className="flex w-[260px] h-[180px] rounded-2xl bg-white/40 -ml-[60px] items-center justify-center">
+            <Image
+              src="/assets/SSG mark.svg"
+              alt="프레임"
+              width={200}
+              height={118}
+              priority={true}
+              style={{ objectFit: "contain", objectPosition: "left top" }}
+            />
+          </div>
+          {event?.status == "finished" && getWinningTeam() === 1 && (
+            <div className="absolute top-[487px] left-[190px]">
+              <Image
+                src="/assets/WIN!!.svg"
+                alt="프레임"
+                width={401}
+                height={178}
+                priority={true}
+                style={{ objectFit: "contain", objectPosition: "left top" }}
+              />
+            </div>
+          )}
         </div>
 
-        <div>
+        <div className="flex flex-row">
+          <div className="flex w-[260px] h-[180px] rounded-2xl bg-white/40 -mr-[60px] items-center justify-center">
+            <Image
+              src="/assets/doosan mark.svg"
+              alt="프레임"
+              width={200}
+              height={111}
+              priority={true}
+              style={{ objectFit: "contain", objectPosition: "left top" }}
+            />
+          </div>
           <Gauge score={team2} maxScore={100} />
+          {event?.status == "finished" && getWinningTeam() === 2 && (
+            <div className="absolute top-[487px] right-[190px]">
+              <Image
+                src="/assets/WIN!!.svg"
+                alt="프레임"
+                width={401}
+                height={178}
+                priority={true}
+                style={{ objectFit: "contain", objectPosition: "left top" }}
+              />
+            </div>
+          )}
         </div>
       </div>
     </div>
