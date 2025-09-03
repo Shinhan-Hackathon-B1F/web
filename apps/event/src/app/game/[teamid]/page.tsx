@@ -117,6 +117,9 @@ export default function Game({
 
     sessionStorage.setItem('gameResult', JSON.stringify({ 
       outcome: isWin ? 'win' : 'lose',
+      teamid: teamid,
+      myScore: cheerCount,
+      teamScore: data?.cheer_average,
       timestamp: Date.now() 
     }));
     router.push('/result');
