@@ -63,7 +63,7 @@ export default function CheerEvent() {
       </div>
 
       {/* Play Button */}
-      <div className="p-6 pb-16">
+      <div className="fixed bottom-4 left-0 right-0 m-5 mb-8">
         <button
           onClick={handlePlayClick}
           className="w-full bg-white text-black font-pretendard font-black text-2xl py-4 rounded-2xl"
