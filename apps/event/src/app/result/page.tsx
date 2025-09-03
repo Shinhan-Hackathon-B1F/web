@@ -91,10 +91,8 @@ export default function GameResult() {
   }, []);
 
   return (
-    /*<Suspense fallback={<div>Loading...</div>}>
-      <ResultContent outcome={outcome} teamId={teamId} isLoading={isLoading} />
-    </Suspense>*/
-    // 테스트용 주석 해제하고 위 코드 주석처리하면 됩니다
-    <LoseComponent teamId={2} myScore={myScore} teamScore={teamScore} />
+    <Suspense fallback={<div>Loading...</div>}>
+      <ResultContent outcome={outcome} teamId={teamId} myScore={myScore} teamScore={teamScore} isLoading={isLoading}  />
+    </Suspense>
   );
 }
