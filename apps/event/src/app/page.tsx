@@ -30,7 +30,6 @@ export default function CheerEvent() {
             <Image
               src="/assets/Frame 5403.png"
               alt="프레임"
-              quality={100}
               width={160}
               height={90}
               priority={true}
@@ -48,7 +47,7 @@ export default function CheerEvent() {
         <div className="flex justify-center mb-4">
           <div className="relative justify-center w-[160px] h-[90px] mx-auto mb-4">
             <Image
-              src="/assets/image 155.svg"
+              src="/assets/image 155.png"
               alt="프레임"
               fill
               unoptimized={true}

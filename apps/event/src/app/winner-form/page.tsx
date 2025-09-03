@@ -4,7 +4,7 @@ import Image from "next/image";
 
 export default function WinnerForm() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#0061C3] to-[#0036A2]">
+    <div className="flex flex-col min-h-screen bg-gradient-to-b from-[#0061C3] to-[#0036A2]">
       {/* Header Section */}
       <div className="text-white px-6 pt-12 pb-8">
         <h1 className="text-[22px] font-pretendard font-semibold">
@@ -26,7 +26,7 @@ export default function WinnerForm() {
             <div className="text-center">
               <div className="mb-4 flex items-center justify-center">
                 <Image
-                  src="/assets/form/Frame 5403.svg"
+                  src="/assets/form/Frame 5403.png"
                   alt="프레임"
                   width={134}
                   height={87}
@@ -44,7 +44,7 @@ export default function WinnerForm() {
             <div className="text-center">
               <div className="mb-4 flex items-center justify-center">
                 <Image
-                  src="/assets/form/Group 165.svg"
+                  src="/assets/form/Group 165.png"
                   alt="프레임"
                   width={87}
                   height={90}
@@ -62,7 +62,7 @@ export default function WinnerForm() {
       </div>
 
       {/* Form Section */}
-      <div className="bg-white px-6 py-8 min-h-96">
+      <div className="bg-white px-6 py-8 flex-1 pb-24">
         <div className="space-y-6">
           {/* Name Input */}
           <div>

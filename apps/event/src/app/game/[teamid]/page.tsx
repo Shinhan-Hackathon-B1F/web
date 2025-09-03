@@ -242,7 +242,7 @@ export default function Game({
         <Image
           src={`/assets/teambutton/${
             gameData.teamid == 1 ? "ssg normal" : "doosan normal"
-          }.svg`}
+          }.png`}
           alt="프레임"
           fill
           priority={true}

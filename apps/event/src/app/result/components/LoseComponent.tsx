@@ -26,8 +26,8 @@ export default function LoseComponent({
         <Image
           src={
             teamid === 1
-              ? "/assets/result/result ssg.svg"
-              : "/assets/result/result doosan.svg"
+              ? "/assets/result/result ssg.png"
+              : "/assets/result/result doosan.png"
           }
           alt="프레임"
           width={251}
@@ -42,8 +42,8 @@ export default function LoseComponent({
         <Image
           src={
             teamid === 1
-              ? "/assets/result/ssg lose.svg"
-              : "/assets/result/doosan lose.svg"
+              ? "/assets/result/ssg lose.png"
+              : "/assets/result/doosan lose.png"
           }
           alt="프레임"
           width={296}
@@ -55,9 +55,9 @@ export default function LoseComponent({
 
       <div className="bg-black h-[248px] p-3 mx-5 rounded-2xl">
         <Image
-          src="/assets/result/응원지수_패배.svg"
+          src="/assets/result/응원지수_패배.png"
           alt="프레임"
-          width={0}
+          width={311}
           height={223}
           priority={true}
           className="w-full h-full object-cover z-0 rounded-2xl"
@@ -119,7 +119,7 @@ export default function LoseComponent({
 
             {/* 이미지를 버튼보다 크게 겹치기 */}
             <Image
-              src="/assets/result/이벤트 더보기.svg"
+              src="/assets/result/이벤트 더보기.png"
               alt="프레임"
               width={189}
               height={127}

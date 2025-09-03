@@ -20,7 +20,7 @@ export default function WinComponent({
   console.log(teamid)
 
   return (
-    <div className="max-w-screen min-h-screen flex flex-col text-white bg-gradient-to-b from-[#0061C3] to-[#0036A2]">
+    <div className="max-w-screen min-h-screen flex flex-col text-white bg-gradient-to-b from-[#0061C3] to-[#0036A2] pb-24">
       <div className="text-center pt-16 pb-7">
         <h1 className="absolute right-[20px] top-[16px] font-kbo text-[16px] font-bold">
           응원지수를 높여라
@@ -31,8 +31,8 @@ export default function WinComponent({
         <Image
           src={
             teamid == 1
-              ? "/assets/result/result ssg.svg"
-              : "/assets/result/result doosan.svg"
+              ? "/assets/result/result ssg.png"
+              : "/assets/result/result doosan.png"
           }
           alt="프레임"
           width={251}
@@ -47,8 +47,8 @@ export default function WinComponent({
         <Image
           src={
             teamid == 1
-              ? "/assets/result/ssg win.svg"
-              : "/assets/result/doosan win.svg"
+              ? "/assets/result/ssg win.png"
+              : "/assets/result/doosan win.png"
           }
           alt="프레임"
           width={296}

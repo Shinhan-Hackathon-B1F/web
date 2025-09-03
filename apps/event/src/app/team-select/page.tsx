@@ -197,7 +197,7 @@ export default function TeamSelect() {
               <Image
                 src={`/assets/buttons/team=SSG, state=${
                   selectedTeam === "1" ? "focus" : "non"
-                }.svg`}
+                }.png`}
                 alt="프레임"
                 width={120}
                 height={120}
@@ -217,7 +217,7 @@ export default function TeamSelect() {
               <Image
                 src={`/assets/buttons/team=두산, state=${
                   selectedTeam === "2" ? "focus" : "non"
-                }.svg`}
+                }.png`}
                 alt="프레임"
                 width={120}
                 height={120}
