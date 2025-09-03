@@ -59,7 +59,7 @@ export default function Display() {
         console.log(finishTime, now);
         const remaining = Math.max(
           0,
-          Math.ceil((finishTime - now) / 1000 - 10)
+          Math.ceil((finishTime - now) / 1000 - 11)
         );
 
         console.log(remaining);
