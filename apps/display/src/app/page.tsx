@@ -121,7 +121,7 @@ export default function Display() {
 
       {/* Timer */}
 
-      <div className="absolute top-8 right-8 xl:top-24 xl:right-24 flex gap-2">
+      <div className="absolute top-8 right-8 xl:top-24 xl:right-24 flex gap-2 z-50">
         <div className="bg-[#121212] p-6 rounded-2xl">
           <div className="relative inline-block">
             <h1 className="font-digit text-6xl tracking-[-4.5%] text-gray-800">00</h1>
@@ -185,7 +185,6 @@ export default function Display() {
 
       {/* Bottom section */}
       <div className="absolute bottom-0 left-[-50px] flex">
-        {/* QR Code - left bottom */}
         <div className="relative w-[400px] h-[350px] xl:w-[768px] xl:h-[624px]">
           <Image
             src="/assets/Group 163.svg"
@@ -197,12 +196,34 @@ export default function Display() {
         </div>
       </div>
 
-      {/* Cans decoration - fixed to bottom right */}
       <div className="absolute bottom-0 right-[-20px] flex">
-        {/* QR Code - left bottom */}
         <div className="relative w-[500px] h-[400px] xl:w-[1058px] xl:h-[809px]">
           <Image
             src="/assets/Group 164.svg"
+            alt="cass"
+            fill
+            priority={true}
+            className="object-contain"
+          />
+        </div>
+      </div>
+
+      <div className="absolute top-0 left-[-40px] flex">
+        <div className="relative w-[200px] h-[200px] xl:w-[325px] xl:h-[450px]">
+          <Image
+            src="/assets/왼쪽 상단.svg"
+            alt="cass"
+            fill
+            priority={true}
+            className="object-contain"
+          />
+        </div>
+      </div>
+
+      <div className="absolute top-[-42px] right-[-5px] flex z-0">
+        <div className="relative w-[400px] h-[200px] xl:w-[832px] xl:h-[350px] ">
+          <Image
+            src="/assets/오른쪽 상단.svg"
             alt="cass"
             fill
             priority={true}
