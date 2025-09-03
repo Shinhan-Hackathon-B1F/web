@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { getUserId } from "@/utils/userIdentifier";
 import { createClient } from "../../../../../../shared/utils/supabase/client";
 import { useRouter } from "next/navigation";
-import { Event } from "../../../../../../shared/types";
+import { Event } from "../../../../../../shared/types"
 import Dimmed from "@/app/team-select/components/dimmed";
 import Image from "next/image";
 
@@ -24,6 +24,8 @@ export default function Game({
   const [event, setEvent] = useState<Event | null>(null);
   const [timeRemaining, setTimeRemaining] = useState(-1);
 
+  const [cheerCount, setCheerCount] = useState(0);
+
   useEffect(() => {
     fetchEventData();
   }, []);
@@ -40,6 +42,9 @@ export default function Game({
       });
 
       console.log(`User ${userId} joined team ${teamid}`);
+      
+      // 초기 이벤트 데이터 로딩
+      await fetchEventData();
     };
 
     initGame();
@@ -69,19 +74,19 @@ export default function Game({
         },
         (payload) => {
           console.log(payload);
-
+          
           // 이벤트 데이터 업데이트
           if (payload.new) {
             setEvent(payload.new as Event);
           }
-
+          
           // 이벤트 종료시 결과 페이지로 이동
           if (
             payload.new &&
             "status" in payload.new &&
             payload.new.status === "finished"
           ) {
-            checkWinnerAndRedirect();
+            checkWinnerAndRedirect()
           }
         }
       )
@@ -96,44 +101,37 @@ export default function Game({
     const { teamid } = await params;
 
     const { data } = await supabase
-      .from("team_stats_view")
-      .select("cheer_average")
-      .eq("id", teamid)
+      .from('team_stats_view')
+      .select('cheer_average')
+      .eq('id', teamid)
       .single();
-
+  
     const { data: maxAverage } = await supabase
-      .from("team_stats_view")
-      .select("cheer_average")
-      .order("cheer_average", { ascending: false })
+      .from('team_stats_view')
+      .select('cheer_average')
+      .order('cheer_average', { ascending: false })
       .limit(1)
       .single();
+  
+    const isWin = data?.cheer_average >= maxAverage?.cheer_average
 
-    const isWin = data?.cheer_average >= maxAverage?.cheer_average;
-
-    sessionStorage.setItem(
-      "gameResult",
-      JSON.stringify({
-        outcome: isWin ? "win" : "lose",
-        timestamp: Date.now(),
-      })
-    );
-    router.push("/result");
+    sessionStorage.setItem('gameResult', JSON.stringify({ 
+      outcome: isWin ? 'win' : 'lose',
+      timestamp: Date.now() 
+    }));
+    router.push('/result');
   };
 
   // 남은 시간 계산 타이머
   useEffect(() => {
     let timer: NodeJS.Timeout | null = null;
 
-    if (
-      (event?.status === "active" || event?.status === "finished") &&
-      event?.finished_at
-    ) {
+    if (event?.status === "active" && event?.finished_at) {
       const updateTimer = () => {
         const finishTime = new Date(event.finished_at!).getTime();
-        const now = new Date().getTime();
+        const now = new Date().getTime()
         const remaining = Math.max(0, Math.ceil((finishTime - now) / 1000 - 1));
 
-        console.log(remaining);
         setTimeRemaining(remaining);
 
         // 시간이 끝나면 타이머 정리
@@ -157,6 +155,8 @@ export default function Game({
 
   const cheerForTeam = async (teamId: number | null) => {
     const sessionId = getUserId();
+
+    setCheerCount(prev => prev + 1);
 
     if (teamId != null) {
       const { error } = await supabase.from("user_cheers").insert({
@@ -215,7 +215,7 @@ export default function Game({
                 000
               </h1>
               <span className="absolute top-0 right-0 font-digit text-5xl tracking-[-4.5%]">
-                {timeRemaining}
+                {cheerCount}
               </span>
             </div>
           </div>
@@ -227,7 +227,7 @@ export default function Game({
 
       <button
         onClick={() => cheerForTeam(gameData.teamid)}
-        className="fixed bottom-7 left-1/2 transform -translate-x-1/2 flex items-center justify-center aspect-square w-[260px] h-[408px] z-50"
+        className="fixed bottom-7 left-1/2 transform -translate-x-1/2 flex items-center justify-center aspect-square w-[230px] h-[400px] sm:w-[260px] sm:h-[408px] z-0"
       >
         <Image
           src={`/assets/teambutton/${
