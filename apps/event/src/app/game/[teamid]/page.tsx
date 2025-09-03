@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { getUserId } from "@/utils/userIdentifier";
 import { createClient } from "../../../../../../shared/utils/supabase/client";
 import { useRouter } from "next/navigation";
@@ -25,6 +25,13 @@ export default function Game({
   const [timeRemaining, setTimeRemaining] = useState(-1);
 
   const [cheerCount, setCheerCount] = useState(0);
+
+  const cheerCountRef = useRef(0);
+
+  // cheerCount가 변경될 때마다 ref도 업데이트
+  useEffect(() => {
+    cheerCountRef.current = cheerCount;
+  }, [cheerCount]);
 
   useEffect(() => {
     fetchEventData();
@@ -118,8 +125,8 @@ export default function Game({
     sessionStorage.setItem('gameResult', JSON.stringify({ 
       outcome: isWin ? 'win' : 'lose',
       teamid: teamid,
-      myScore: cheerCount,
-      teamScore: data?.cheer_average,
+      myScore: cheerCountRef.current,
+      teamScore: Math.round(data?.cheer_average || 0),
       timestamp: Date.now() 
     }));
     router.push('/result');
