@@ -28,16 +28,11 @@ export default function CheerEvent() {
         <div className="relative justify-center mb-4">
           <div className="relative justify-center w-[160px] h-[90px] mx-auto mb-4">
             <Image
-              src="/assets/Frame 5403.svg"
+              src="/assets/Frame 5403.png"
               alt="프레임"
               fill
-              unoptimized={true}
               priority={true}
               className="object-contain"
-              style={{ 
-                imageRendering: "crisp-edges",
-                backfaceVisibility: "hidden",
-              }}
             />
           </div>
         </div>
