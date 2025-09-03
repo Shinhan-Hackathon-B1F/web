@@ -26,11 +26,13 @@ export default function CheerEvent() {
       {/* Rewards Section */}
       <div className="bg-white/10 flex flex-col items-center justify-center w-fit p-10 my-5 mx-auto space-y-10 rounded-md">
         <div className="relative justify-center mb-4">
-          <div className="relative justify-center w-[160px] h-[90px] mx-auto mb-4">
+          <div className="relative justify-center mx-auto mb-4">
             <Image
               src="/assets/Frame 5403.png"
               alt="프레임"
-              fill
+              quality={100}
+              width={160}
+              height={90}
               priority={true}
               className="object-contain"
             />
