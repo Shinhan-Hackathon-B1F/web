@@ -163,7 +163,7 @@ export default function Display() {
         <div>
           SSG
           <div>{team1}</div>
-          <Gauge score={team1} maxScore={100} />
+          <Gauge score={team1} maxScore={100} flip={true} />
         </div>
 
         <div>

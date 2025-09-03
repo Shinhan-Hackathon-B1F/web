@@ -1,77 +1,168 @@
 import React from "react";
-
+import Image from "next/image";
 interface GaugeProps {
   score: number;
   maxScore: number;
   width?: number;
   height?: number;
+  flip?: boolean;
 }
 
 const Gauge: React.FC<GaugeProps> = ({
   score,
   maxScore,
-  width = 100,
-  height = 200,
+  width = 260,
+  height = 310,
+  flip = false,
 }) => {
-  const segmentCount = 15; // 세그먼트 개수
+  const segmentCount = 23;
   const filledSegments = Math.floor((score / maxScore) * segmentCount);
 
-  // 각 세그먼트별 색상 (아래에서 위로)
+  const colors = [
+    "#CCEF86",
+    "#DEEF86",
+    "#DEEF86",
+    "#EEDE6E",
+    "#EEDE6E",
+
+    "#F1BD66",
+    "#F1BD66",
+    "#F1BD66",
+    "#F1BD66",
+    "#F9943B",
+
+    "#F9943B",
+    "#F9943B",
+    "#F9943B",
+    "#FB6B18",
+    "#FB6B18",
+
+    "#FB6B18",
+    "#FF5500",
+    "#FF5500",
+    "#FF5500",
+    "#FF3131",
+
+    "#FF3131",
+    "#FF3131",
+    "#FF3131",
+  ];
+
   const getSegmentColor = (index: number) => {
-    const colors = [
-      "#EEDE6E",
-      "#EFDA6D",
-      "#EFD76C",
-      "#EFD26B",
-      "#F0CE6A",
-      "#F0CA69",
-      "#F0C668",
-      "#F0C167",
-      "#F1BD66",
-      "#F1B965",
-      "#F0B464",
-      "#F1B063",
-      "#F2AD62",
-      "#F2A962",
-      "#F1A460",
-    ];
-    return colors[index] || colors[colors.length - 1];
+    return colors[index % colors.length] || colors[colors.length - 1];
   };
 
   return (
-    <div className="p-10 bg-blue-500 rounded-lg">
-      <div
-        className="relative rounded-lg overflow-hidden border-4 border-gray-700"
-        style={{ width: `${width}px`, height: `${height}px` }}
-      >
-        {/* 각 세그먼트별로 렌더링 */}
+    <div className="flex items-center justify-center p-8">
+      <div className="relative rounded-lg w-[300px] h-[725px]">
+        <Image
+          src={
+            flip
+              ? "/assets/응원지수 게이지_프레임_flipped.svg"
+              : "/assets/응원지수 게이지_프레임.svg"
+          }
+          alt="Gauge Background"
+          fill
+          className="object-cover"
+          style={{ zIndex: 0 }}
+        />
         {Array.from({ length: segmentCount }, (_, i) => {
-          const segmentIndex = segmentCount - 1 - i; // 아래부터 채우기 위해 뒤집음
+          const segmentIndex = segmentCount - 1 - i;
           const isFilledSegment = segmentIndex < filledSegments;
-        
+
+          const segmentHeight = ((height - 16) / segmentCount) * 1.5;
+
+          const topPosition =
+            32 +
+            i * (segmentHeight + 10) +
+            (i >= 11 ? 10 : 0) +
+            (i >= 15 ? 10 : 0) +
+            (i >= 17 ? 10 : 0);
+
+          let curveWidth;
+          if (i < 11) {
+            curveWidth = 100;
+          } else if (i < 15) {
+            curveWidth = 140;
+          } else if (i < 17) {
+            curveWidth = 180;
+          } else {
+            curveWidth = 220;
+          }
+
+          const leftMargin = flip ? 20 : width - curveWidth + 20;
+          const adjustedHeight = segmentHeight;
+
+          const isTopSegment = i === 0;
+          const isBottomSegment = i === segmentCount - 1;
+
+          if (isTopSegment) {
+            return (
+              <div
+                key={i}
+                className="absolute transition-all duration-300 ease-out"
+                style={{
+                  top: `${topPosition - 10}px`, // 10px 위로 올려서 간격 더 넓히기
+                  left: `${leftMargin}px`,
+                  width: `${curveWidth}px`,
+                  height: `${adjustedHeight * 1.5}px`,
+                  backgroundColor: isFilledSegment
+                    ? getSegmentColor(segmentIndex)
+                    : "#6b6b6b",
+                  borderRadius: "4px",
+                  clipPath: flip
+                    ? `polygon(0% 0%, 100% 0%, 100% 100%, 0% 10%)`
+                    : `polygon(0% 0%, 100% 0%, 100% 10%, 0% 100%)`,
+                  marginBottom: "0px",
+                }}
+              />
+            );
+          }
+
+          if (isBottomSegment) {
+            return (
+              <div
+                key={i}
+                className="absolute transition-all duration-300 ease-out"
+                style={{
+                  top: `${topPosition - 58}px`, // 56px 위로 올리기
+                  left: `${leftMargin}px`,
+                  width: `${curveWidth}px`,
+                  height: `${adjustedHeight * 3.2}px`, // 높이를 3.2배로 조정
+                  backgroundColor: isFilledSegment
+                    ? getSegmentColor(segmentIndex)
+                    : "#6b6b6b",
+                  borderRadius: "4px",
+                  clipPath: flip
+                    ? `polygon(0% 0%, 100% 90%, 100% 100%, 0% 100%)`
+                    : `polygon(0% 90%, 100% 0%, 100% 100%, 0% 100%)`,
+                  marginBottom: "0px",
+                }}
+              />
+            );
+          }
+
           return (
             <div
               key={i}
-              className={`absolute left-0 right-0 transition-all duration-300 ease-out`}
+              className="absolute transition-all duration-300 ease-out"
               style={{
-                top: `${i * (100 / segmentCount)}%`,
-                height: `${100 / segmentCount}%`,
+                top: `${topPosition}px`,
+                left: `${leftMargin}px`,
+                width: `${curveWidth}px`,
+                height: `${adjustedHeight}px`,
                 backgroundColor: isFilledSegment
                   ? getSegmentColor(segmentIndex)
-                  : "#d1d5db",
-                borderBottom:
-                  i < segmentCount - 1 ? "2px solid #374151" : "none",
-                borderTop: i === 0 ? "none" : "2px solid #374151",
+                  : "#6b6b6b",
+                borderRadius: "4px",
+                marginBottom: "0px",
+                transform: flip ? `skewY(15deg)` : `skewY(-15deg)`,
+                transformOrigin: flip ? "right center" : "left center",
               }}
             />
           );
         })}
-
-        {/* 상하단 둥근 모서리 */}
-        <div className="absolute top-0 left-0 right-0 h-2 bg-gray-700 rounded-t" />
-        <div className="absolute bottom-0 left-0 right-0 h-2 bg-gray-700 rounded-b" />
       </div>
-
     </div>
   );
 };
