@@ -130,7 +130,7 @@ export default function Display() {
             </span>
           </div>
           
-          <span className="text-sm ml-1">초</span>
+          <span className="font-pretendard font-semibold text-4xl ml-1 relative top-1">초</span>
         </div>
       </div>
 
@@ -227,7 +227,7 @@ export default function Display() {
             alt="cass"
             fill
             priority={true}
-            className="object-contain"
+            style={{ objectFit: "contain", objectPosition: "left top" }}
           />
         </div>
       </div>
