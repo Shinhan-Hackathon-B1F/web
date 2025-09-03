@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import Image from "next/image";
+
 interface GaugeProps {
   score: number;
   maxScore: number;
@@ -17,6 +18,20 @@ const Gauge: React.FC<GaugeProps> = ({
 }) => {
   const segmentCount = 23;
   const filledSegments = Math.floor((score / maxScore) * segmentCount);
+  const audioRef = useRef<HTMLAudioElement>(null);
+  const prevFilledSegmentsRef = useRef<number>(0);
+
+  // filledSegments가 증가할 때마다 소리 재생
+  useEffect(() => {
+    if (filledSegments > prevFilledSegmentsRef.current && audioRef.current) {
+      // 이전 재생 중인 오디오가 있다면 처음부터 다시 재생
+      audioRef.current.currentTime = 0;
+      audioRef.current.play().catch((error) => {
+        console.log("Audio play failed:", error);
+      });
+    }
+    prevFilledSegmentsRef.current = filledSegments;
+  }, [filledSegments]);
 
   const colors = [
     "#CCEF86",
@@ -54,6 +69,11 @@ const Gauge: React.FC<GaugeProps> = ({
 
   return (
     <div className="flex items-center justify-center">
+      <audio ref={audioRef} preload="auto">
+        <source src={"/assets/점수 쌓이는 소리.mp4"} type="audio/mp4" />
+        Your browser does not support the audio element.
+      </audio>
+
       <div className="relative rounded-lg w-[300px] h-[725px]">
         <Image
           src={
@@ -102,7 +122,7 @@ const Gauge: React.FC<GaugeProps> = ({
                 key={i}
                 className="absolute transition-all duration-300 ease-out"
                 style={{
-                  top: `${topPosition - 10}px`, // 10px 위로 올려서 간격 더 넓히기
+                  top: `${topPosition - 10}px`,
                   left: `${leftMargin}px`,
                   width: `${curveWidth}px`,
                   height: `${adjustedHeight * 1.5}px`,
@@ -125,10 +145,10 @@ const Gauge: React.FC<GaugeProps> = ({
                 key={i}
                 className="absolute transition-all duration-300 ease-out"
                 style={{
-                  top: `${topPosition - 58}px`, // 56px 위로 올리기
+                  top: `${topPosition - 58}px`,
                   left: `${leftMargin}px`,
                   width: `${curveWidth}px`,
-                  height: `${adjustedHeight * 3.2}px`, // 높이를 3.2배로 조정
+                  height: `${adjustedHeight * 3.2}px`,
                   backgroundColor: isFilledSegment
                     ? getSegmentColor(segmentIndex)
                     : "#6b6b6b",
