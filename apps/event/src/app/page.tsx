@@ -31,6 +31,7 @@ export default function CheerEvent() {
               src="/assets/Frame 5403.svg"
               alt="프레임"
               fill
+              unoptimized={true}
               priority={true}
               className="object-contain"
             />
@@ -49,6 +50,7 @@ export default function CheerEvent() {
               src="/assets/image 155.svg"
               alt="프레임"
               fill
+              unoptimized={true}
               priority={true}
               className="object-contain"
             />
