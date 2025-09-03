@@ -4,12 +4,12 @@ import { useEffect, useState } from "react";
 import { createClient } from "../../../../../shared/utils/supabase/client";
 import { Event, Team } from "../../../../../shared/types";
 import Gauge from "./components/Gauge";
+import Image from "next/image";
 
 export default function Display() {
   const supabase = createClient();
 
   const [event, setEvent] = useState<Event | null>(null);
-  const [timeRemaining, setTimeRemaining] = useState(0);
 
   const [team1, setTeam1] = useState(0);
   const [team2, setTeam2] = useState(0);
@@ -110,65 +110,31 @@ export default function Display() {
     };
   }, []);
 
-  useEffect(() => {
-    let timer: NodeJS.Timeout | null = null;
-
-    console.log("Timer useEffect triggered:", {
-      status: event?.status,
-      finished_at: event?.finished_at,
-      event: event,
-    });
-
-    if (event?.status === "active" && event?.finished_at) {
-      const updateTimer = () => {
-        const finishTime = new Date(event.finished_at!).getTime();
-        const now = new Date().getTime();
-        const remaining = Math.max(0, Math.ceil((finishTime - now) / 1000));
-
-        setTimeRemaining(remaining);
-
-        // 시간이 끝나면 타이머 정리
-        if (remaining <= 0) {
-          if (timer) clearInterval(timer);
-        }
-      };
-
-      updateTimer(); // 즉시 실행
-      timer = setInterval(updateTimer, 1000);
-    } else {
-      setTimeRemaining(0);
-    }
-
-    return () => {
-      if (timer) {
-        clearInterval(timer);
-      }
-    };
-  }, [event]);
-
   return (
-    <div className="mb-6 p-4 border">
-      {event?.status === "active" && timeRemaining > 0 && (
-        <p>
-          남은 시간:{" "}
-          <span className="font-bold text-red-500">{timeRemaining}초</span>
-        </p>
-      )}
-      {event?.status === "finished" && (
-        <p className="text-red-500 font-bold">이벤트가 종료되었습니다!</p>
-      )}
+    <div className="min-h-screen mb-6 py-[40px] px-[50px] xl:py-[80px] xl:px-[100px]">
+      <div className="flex flex-row justify-between">
+        <div className="relative w-[357px] h-[40px] xl:w-[715px] xl:h-[80px] ">
+          <Image
+            src="/assets/Frame 5408_count.svg"
+            alt="프레임"
+            fill
+            priority={true}
+            style={{ objectFit: 'contain', objectPosition: 'left top' }}
+          />
+        </div>
+
+        <h1 className="text-4xl xl:text-[64px] font-kbo font-bold mb-4 leading-tight text-white">
+            응원 지수를 높여라
+          </h1>
+      </div>
 
       {/* 팀별 점수 */}
-      <div className="flex flex-row gap-12">
+      <div className="flex flex-row justify-between gap-12 ">
         <div>
-          SSG
-          <div>{team1}</div>
           <Gauge score={team1} maxScore={100} flip={true} />
         </div>
 
         <div>
-          두산
-          <div>{team2}</div>
           <Gauge score={team2} maxScore={100} />
         </div>
       </div>

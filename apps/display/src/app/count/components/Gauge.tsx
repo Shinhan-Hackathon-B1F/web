@@ -53,7 +53,7 @@ const Gauge: React.FC<GaugeProps> = ({
   };
 
   return (
-    <div className="flex items-center justify-center p-8">
+    <div className="flex items-center justify-center">
       <div className="relative rounded-lg w-[300px] h-[725px]">
         <Image
           src={
@@ -75,16 +75,16 @@ const Gauge: React.FC<GaugeProps> = ({
           const topPosition =
             32 +
             i * (segmentHeight + 10) +
-            (i >= 11 ? 10 : 0) +
-            (i >= 15 ? 10 : 0) +
-            (i >= 17 ? 10 : 0);
+            (i >= 14 ? 10 : 0) +
+            (i >= 18 ? 10 : 0) +
+            (i >= 20 ? 10 : 0);
 
           let curveWidth;
-          if (i < 11) {
+          if (i < 14) {
             curveWidth = 100;
-          } else if (i < 15) {
+          } else if (i < 18) {
             curveWidth = 140;
-          } else if (i < 17) {
+          } else if (i < 20) {
             curveWidth = 180;
           } else {
             curveWidth = 220;
