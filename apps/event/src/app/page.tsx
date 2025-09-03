@@ -34,6 +34,10 @@ export default function CheerEvent() {
               unoptimized={true}
               priority={true}
               className="object-contain"
+              style={{ 
+                imageRendering: "crisp-edges",
+                backfaceVisibility: "hidden",
+              }}
             />
           </div>
         </div>
@@ -53,6 +57,10 @@ export default function CheerEvent() {
               unoptimized={true}
               priority={true}
               className="object-contain"
+              style={{ 
+                imageRendering: "crisp-edges",
+                backfaceVisibility: "hidden",
+              }}
             />
           </div>
         </div>
