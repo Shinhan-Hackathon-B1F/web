@@ -129,7 +129,8 @@ export default function Game({
       teamScore: Math.round(data?.cheer_average || 0),
       timestamp: Date.now() 
     }));
-    router.push('/result');
+    
+    window.location.replace('/result');
   };
 
   // 남은 시간 계산 타이머
