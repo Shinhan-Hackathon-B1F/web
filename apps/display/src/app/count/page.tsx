@@ -142,7 +142,7 @@ export default function Display() {
       <div className="flex flex-row justify-between pb-[114px]">
         <div className="relative w-[357px] h-[40px] xl:w-[715px] xl:h-[80px]">
           <Image
-            src="/assets/Frame 5408_count.svg"
+            src="/assets/Frame 5408.png"
             alt="프레임"
             fill
             priority={true}

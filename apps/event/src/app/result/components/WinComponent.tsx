@@ -17,7 +17,7 @@ export default function WinComponent({
     sessionStorage.setItem("winner_verified", "true");
   };
 
-  console.log(teamid)
+  console.log(teamid);
 
   return (
     <div className="max-w-screen min-h-screen flex flex-col text-white bg-gradient-to-b from-[#0061C3] to-[#0036A2] pb-24">
@@ -38,7 +38,7 @@ export default function WinComponent({
           width={251}
           height={139}
           priority={true}
-          style={{ mixBlendMode: "hard-light" }}
+          style={{ mixBlendMode: "hard-light", width: "auto", height: "auto" }}
           className="max-w-full max-h-full object-contain"
         />
       </div>
@@ -54,7 +54,12 @@ export default function WinComponent({
           width={296}
           height={58}
           priority={true}
-          style={{ objectFit: "contain", objectPosition: "left top" }}
+          style={{
+            objectFit: "contain",
+            objectPosition: "left top",
+            width: "auto",
+            height: "auto",
+          }}
         />
       </div>
 

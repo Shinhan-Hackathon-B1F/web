@@ -138,7 +138,7 @@ export default function Display() {
       <div className="relative z-10 px-4 min-h-screen flex flex-col justify-center items-center">
         <div className="relative w-[429px] h-[48px] xl:w-[715px] xl:h-[80px] mx-auto mb-4">
           <Image
-            src="/assets/Frame 5408.svg"
+            src="/assets/Frame 5408.png"
             alt="프레임"
             fill
             priority={true}

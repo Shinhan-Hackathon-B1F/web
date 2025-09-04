@@ -13,7 +13,17 @@ export default function CheerEvent() {
     <div className="max-w-sm mx-auto min-h-screen flex flex-col text-white">
       {/* Header */}
       <div className="text-center px-6 mt-16">
-        <div className="text-lg font-bold mb-2">프로 야구 응원 이벤트</div>
+      <div className="relative justify-center mx-auto mb-4">
+            <Image
+              src="/assets/Frame 5408.png"
+              alt="프레임"
+              width={276}
+              height={30}
+              priority={true}
+              className="object-contain"
+              style={{ width: "auto", height: "auto" }}
+            />
+          </div>
         <h1 className="font-kbo text-4xl font-bold mb-4">응원지수를 높여라</h1>
         <p className="font-pretendard text-[16px] leading-relaxed text-white/80">
           뜨거운 응원으로{" "}
@@ -26,7 +36,7 @@ export default function CheerEvent() {
       {/* Rewards Section */}
       <div className="bg-white/10 flex flex-col items-center justify-center w-fit p-10 my-5 mx-auto space-y-10 rounded-md">
         <div className="relative justify-center mb-4">
-          <div className="relative justify-center mx-auto mb-4">
+          <div className="relative justify-center mb-4">
             <Image
               src="/assets/Frame 5403.png"
               alt="프레임"
@@ -34,6 +44,7 @@ export default function CheerEvent() {
               height={90}
               priority={true}
               className="object-contain"
+              style={{ width: "auto", height: "auto" }}
             />
           </div>
         </div>

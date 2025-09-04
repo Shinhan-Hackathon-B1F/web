@@ -33,7 +33,11 @@ export default function LoseComponent({
           width={251}
           height={139}
           priority={true}
-          style={{ mixBlendMode: "hard-light" }}
+          style={{
+            mixBlendMode: "hard-light",
+            width: "auto",
+            height: "auto",
+          }}
           className="max-w-full max-h-full object-contain"
         />
       </div>
@@ -49,7 +53,12 @@ export default function LoseComponent({
           width={296}
           height={58}
           priority={true}
-          style={{ objectFit: "contain", objectPosition: "left top" }}
+          style={{
+            objectFit: "contain",
+            objectPosition: "left top",
+            width: "auto",
+            height: "auto",
+          }}
         />
       </div>
 
@@ -103,16 +112,17 @@ export default function LoseComponent({
           <div className="relative w-full h-full overflow-visible">
             {/* 버튼 배경 */}
             <button className="w-full h-full text-center bg-white text-gray-900 rounded-2xl font-pretendard font-semibold overflow-visible">
-              <div className="absolute right-4 top-0 bottom-0 h-[58px] flex justify-center items-center font-pretendard font-semibold text-[18px]">이벤트 더보기
+              <div className="absolute right-4 top-0 bottom-0 h-[58px] flex justify-center items-center font-pretendard font-semibold text-[18px]">
+                이벤트 더보기
                 <div className="ml-1">
-                <Image
-              src="/assets/result/chevron-right.svg"
-              alt="프레임"
-              width={24}
-              height={24}
-              priority={true}
-              className="object-contain"
-            />
+                  <Image
+                    src="/assets/result/chevron-right.svg"
+                    alt="프레임"
+                    width={24}
+                    height={24}
+                    priority={true}
+                    className="object-contain"
+                  />
                 </div>
               </div>
             </button>
