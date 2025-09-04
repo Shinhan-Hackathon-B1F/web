@@ -25,7 +25,7 @@ export default function LoseComponent({
       <div className="mix-blend-hard-light">
         <Image
           src={
-            teamid === 1
+            teamid == 1
               ? "/assets/result/result ssg.png"
               : "/assets/result/result doosan.png"
           }
@@ -45,7 +45,7 @@ export default function LoseComponent({
       <div className="-mt-20 ml-12 z-50">
         <Image
           src={
-            teamid === 1
+            teamid == 1
               ? "/assets/result/ssg lose.png"
               : "/assets/result/doosan lose.png"
           }
