@@ -156,7 +156,7 @@ export default function Display() {
             <strong className="font-bold text-white">카스 프레시</strong>{" "}
             터뜨리고
           </p>
-          <p className="font-kbo text-2xl xl:text-5xl text-white/80">
+          <p className="font-kbo text-2xl 2xl:text-5xl text-white/80">
             푸짐한 경품받아가자!
           </p>
         </div>
