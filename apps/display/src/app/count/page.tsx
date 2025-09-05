@@ -131,7 +131,7 @@ export default function Display() {
   });
 
   return (
-    <div className="relative min-h-screen mb-6 py-[40px] px-[50px] xl:py-[80px] xl:px-[100px]">
+    <div className="relative min-h-screen mb-6 py-[40px] px-[50px] 2xl:py-[80px] 2xl:px-[100px]">
       <video
         className="absolute top-0 left-0 w-full h-full object-cover -z-10"
         autoPlay
@@ -140,7 +140,7 @@ export default function Display() {
         <source src="/assets/카스 광고 영상.mp4" type="video/mp4" />
       </video>
       <div className="flex flex-row justify-between pb-[114px]">
-        <div className="relative w-[357px] h-[40px] xl:w-[715px] xl:h-[80px]">
+        <div className="relative w-[357px] h-[40px] 2xl:w-[715px] 2xl:h-[80px]">
           <Image
             src="/assets/Frame 5408.png"
             alt="프레임"
@@ -150,7 +150,7 @@ export default function Display() {
           />
         </div>
 
-        <h1 className="text-4xl xl:text-[64px] font-kbo font-bold mb-4 leading-tight text-white">
+        <h1 className="text-4xl 2xl:text-[64px] font-kbo font-bold mb-4 leading-tight text-white">
           응원 지수를 높여라
         </h1>
       </div>

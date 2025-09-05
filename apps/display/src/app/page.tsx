@@ -121,7 +121,7 @@ export default function Display() {
 
       {/* Timer */}
 
-      <div className="absolute top-8 right-8 xl:top-24 xl:right-24 flex gap-2 z-50">
+      <div className="absolute top-8 right-8 2xl:top-24 2xl:right-24 flex gap-2 z-50">
         <div className="bg-[#121212] p-6 rounded-2xl">
           <div className="relative inline-block">
             <h1 className="font-digit text-6xl tracking-[-4.5%] text-gray-800">00</h1>
@@ -136,7 +136,7 @@ export default function Display() {
 
       {/* Header */}
       <div className="relative z-10 px-4 min-h-screen flex flex-col justify-center items-center">
-        <div className="relative w-[429px] h-[48px] xl:w-[715px] xl:h-[80px] mx-auto mb-4">
+        <div className="relative w-[429px] h-[48px] 2xl:w-[715px] 2xl:h-[80px] mx-auto mb-4">
           <Image
             src="/assets/Frame 5408.png"
             alt="프레임"
@@ -148,10 +148,10 @@ export default function Display() {
 
         {/* Main title */}
         <div className="text-center my-5">
-          <h1 className="text-6xl xl:text-9xl font-kbo font-bold mb-4 leading-tight">
+          <h1 className="text-6xl 2xl:text-9xl font-kbo font-bold mb-4 leading-tight">
             응원 지수를 높여라
           </h1>
-          <p className="font-kbo text-2xl xl:text-5xl text-white/80 mb-2">
+          <p className="font-kbo text-2xl 2xl:text-5xl text-white/80 mb-2">
             뜨거운 응원으로{" "}
             <strong className="font-bold text-white">카스 프레시</strong>{" "}
             터뜨리고
@@ -165,7 +165,7 @@ export default function Display() {
         <div className="text-center my-4">
           <div className="bg-white/10 bg-opacity-50 px-[100px] py-[60px] rounded-lg inline-block">
             <div className="flex gap-4 justify-center mb-4">
-              <div className="relative w-[192px] h-[98px] xl:w-[320px] xl:h-[162px] mx-auto mb-4">
+              <div className="relative w-[192px] h-[98px] 2xl:w-[320px] 2xl:h-[162px] mx-auto mb-4">
                 <Image
                   src="/assets/Frame 5403.svg"
                   alt="유니폼"
@@ -185,7 +185,7 @@ export default function Display() {
 
       {/* Bottom section */}
       <div className="absolute bottom-0 left-[-50px] flex">
-        <div className="relative w-[400px] h-[350px] xl:w-[768px] xl:h-[624px]">
+        <div className="relative w-[400px] h-[350px] 2xl:w-[768px] 2xl:h-[624px]">
           <Image
             src="/assets/Group 163.svg"
             alt="qr"
@@ -197,7 +197,7 @@ export default function Display() {
       </div>
 
       <div className="absolute bottom-0 right-[-20px] flex">
-        <div className="relative w-[500px] h-[400px] xl:w-[1058px] xl:h-[809px]">
+        <div className="relative w-[500px] h-[400px] 2xl:w-[1058px] 2xl:h-[809px]">
           <Image
             src="/assets/Group 164.svg"
             alt="cass"
@@ -209,7 +209,7 @@ export default function Display() {
       </div>
 
       <div className="absolute top-0 left-[-40px] flex">
-        <div className="relative w-[200px] h-[200px] xl:w-[325px] xl:h-[450px]">
+        <div className="relative w-[200px] h-[200px] 2xl:w-[325px] 2xl:h-[450px]">
           <Image
             src="/assets/왼쪽 상단.svg"
             alt="cass"
@@ -221,7 +221,7 @@ export default function Display() {
       </div>
 
       <div className="absolute top-[-42px] right-[-5px] flex z-0">
-        <div className="relative w-[400px] h-[200px] xl:w-[832px] xl:h-[350px] ">
+        <div className="relative w-[400px] h-[200px] 2xl:w-[832px] 2xl:h-[350px] ">
           <Image
             src="/assets/오른쪽 상단.svg"
             alt="cass"
