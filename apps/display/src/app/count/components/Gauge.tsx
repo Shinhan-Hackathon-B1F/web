@@ -12,8 +12,8 @@ interface GaugeProps {
 const Gauge: React.FC<GaugeProps> = ({
   score,
   maxScore,
-  width = 260,
-  height = 310,
+  width = 230,
+  height = 260,
   flip = false,
 }) => {
   const segmentCount = 23;
@@ -74,7 +74,7 @@ const Gauge: React.FC<GaugeProps> = ({
         Your browser does not support the audio element.
       </audio>
 
-      <div className="relative rounded-lg w-[300px] h-[725px]">
+      <div className="relative rounded-lg">
         <Image
           src={
             flip
@@ -82,7 +82,9 @@ const Gauge: React.FC<GaugeProps> = ({
               : "/assets/응원지수 게이지_프레임.svg"
           }
           alt="Gauge Background"
-          fill
+          width={270}
+          height={653}
+          priority={true}
           className="object-cover"
           style={{ zIndex: 0 }}
         />
@@ -145,10 +147,10 @@ const Gauge: React.FC<GaugeProps> = ({
                 key={i}
                 className="absolute transition-all duration-300 ease-out"
                 style={{
-                  top: `${topPosition - 58}px`,
+                  top: `${topPosition - 60}px`,
                   left: `${leftMargin}px`,
                   width: `${curveWidth}px`,
-                  height: `${adjustedHeight * 3.2}px`,
+                  height: `${adjustedHeight * 4}px`,
                   backgroundColor: isFilledSegment
                     ? getSegmentColor(segmentIndex)
                     : "#6b6b6b",

@@ -139,7 +139,7 @@ export default function Display() {
       >
         <source src="/assets/카스 광고 영상.mp4" type="video/mp4" />
       </video>
-      <div className="flex flex-row justify-between pb-[114px]">
+      <div className="flex flex-row justify-between pb-[100px]">
         <div className="relative w-[357px] h-[40px] 2xl:w-[715px] 2xl:h-[80px]">
           <Image
             src="/assets/Frame 5408.png"
@@ -158,7 +158,7 @@ export default function Display() {
       {/* 팀별 점수 */}
       <div className="flex flex-row justify-between gap-12 ">
         <div className="flex flex-row justify-between">
-          <Gauge score={team1} maxScore={100} flip={true} />
+          <Gauge score={team1} maxScore={50} flip={true} />
           <div className="flex w-[260px] h-[180px] rounded-2xl bg-white/40 -ml-[60px] items-center justify-center">
             <Image
               src="/assets/SSG mark.svg"
@@ -194,7 +194,7 @@ export default function Display() {
               style={{ objectFit: "contain", objectPosition: "left top" }}
             />
           </div>
-          <Gauge score={team2} maxScore={100} />
+          <Gauge score={team2} maxScore={50} />
           {event?.status == "finished" && getWinningTeam() === 2 && (
             <div className="absolute top-[487px] right-[190px]">
               <Image
