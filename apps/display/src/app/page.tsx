@@ -131,7 +131,7 @@ export default function Display() {
       </div>
 
       {/* Timer - 클릭 가능하게 수정 */}
-      <div className="absolute top-8 right-8 2xl:top-24 2xl:right-24 flex gap-2 z-50">
+      <div className="absolute top-8 right-8 min-[1536px]:top-24 min-[1536px]:right-24 flex gap-2 z-50">
         <button
           onClick={handleStartEvent}
           disabled={
@@ -163,7 +163,7 @@ export default function Display() {
 
       {/* Header */}
       <div className="relative z-10 px-4 min-h-screen flex flex-col justify-center items-center">
-        <div className="relative w-[429px] h-[48px] 2xl:w-[715px] 2xl:h-[80px] mx-auto mb-4">
+        <div className="relative w-[429px] h-[48px] min-[1536px]:w-[572px] min-[1536px]:h-[64px] min-[1920px]:w-[715px] min-[1920px]:h-[80px] mx-auto mb-4">
           <Image
             src="/assets/Frame 5408.png"
             alt="프레임"
@@ -175,15 +175,15 @@ export default function Display() {
 
         {/* Main title */}
         <div className="text-center my-5">
-          <h1 className="text-6xl 2xl:text-9xl font-kbo font-bold mb-4 leading-tight">
+          <h1 className="text-6xl min-[1536px]:text-8xl min-[1920px]:text-9xl font-kbo font-bold mb-4 leading-tight">
             응원 지수를 높여라
           </h1>
-          <p className="font-kbo text-2xl 2xl:text-5xl text-white/80 mb-2">
+          <p className="font-kbo text-2xl min-[1536px]:text-4xl min-[1920px]:text-5xl text-white/80 mb-2">
             뜨거운 응원으로{" "}
             <strong className="font-bold text-white">카스 프레시</strong>{" "}
             터뜨리고
           </p>
-          <p className="font-kbo text-2xl 2xl:text-5xl text-white/80">
+          <p className="font-kbo text-2xl min-[1536px]:text-4xl min-[1920px]:text-5xl text-white/80">
             푸짐한 경품받아가자!
           </p>
         </div>
@@ -192,7 +192,7 @@ export default function Display() {
         <div className="text-center my-4">
           <div className="bg-white/10 bg-opacity-50 px-[100px] py-[60px] rounded-lg inline-block">
             <div className="flex gap-4 justify-center mb-4">
-              <div className="relative w-[192px] h-[98px] 2xl:w-[320px] 2xl:h-[162px] mx-auto mb-4">
+              <div className="relative w-[192px] h-[98px] min-[1536px]:w-[256px] min-[1536px]:h-[130px] min-[1920px]:w-[320px] min-[1920px]:h-[162px] mx-auto mb-4">
                 <Image
                   src="/assets/Frame 5403.svg"
                   alt="유니폼"
@@ -212,7 +212,7 @@ export default function Display() {
 
       {/* Bottom section */}
       <div className="absolute bottom-0 left-[-50px] flex">
-        <div className="relative w-[400px] h-[350px] 2xl:w-[768px] 2xl:h-[624px]">
+        <div className="relative w-[400px] h-[350px] min-[1536px]:w-[615px] min-[1536px]:h-[500px] min-[1920px]:w-[768px] min-[1920px]:h-[624px]">
           <Image
             src="/assets/Group 163.svg"
             alt="qr"
@@ -223,8 +223,8 @@ export default function Display() {
         </div>
       </div>
 
-      <div className="absolute bottom-0 right-[-20px] flex">
-        <div className="relative w-[500px] h-[400px] 2xl:w-[1058px] 2xl:h-[809px]">
+      <div className="absolute bottom-0 right-[-20px] min-[1920px]:right-[-60px] flex">
+        <div className="relative w-[500px] h-[400px] min-[1536px]:w-[847px] min-[1536px]:h-[648px] min-[1920px]:w-[1058px] min-[1920px]:h-[809px]">
           <Image
             src="/assets/Group 164.svg"
             alt="cass"
@@ -236,7 +236,7 @@ export default function Display() {
       </div>
 
       <div className="absolute top-0 left-[-40px] flex">
-        <div className="relative w-[200px] h-[200px] 2xl:w-[325px] 2xl:h-[450px]">
+        <div className="relative w-[200px] h-[200px] min-[1536px]:w-[260px] min-[1536px]:h-[360px] min-[1920px]:w-[325px] min-[1920px]:h-[450px]">
           <Image
             src="/assets/왼쪽 상단.svg"
             alt="cass"
@@ -248,7 +248,7 @@ export default function Display() {
       </div>
 
       <div className="absolute top-[-42px] right-[-5px] flex z-0">
-        <div className="relative w-[400px] h-[200px] 2xl:w-[832px] 2xl:h-[350px] ">
+        <div className="relative w-[400px] h-[200px] min-[1536px]:w-[666px] min-[1536px]:h-[280px] min-[1920px]:w-[832px] min-[1920px]:h-[350px] ">
           <Image
             src="/assets/오른쪽 상단.svg"
             alt="cass"

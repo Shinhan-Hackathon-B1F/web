@@ -131,7 +131,7 @@ export default function Display() {
   });
 
   return (
-    <div className="relative min-h-screen mb-6 py-[40px] px-[50px] 2xl:py-[80px] 2xl:px-[100px]">
+    <div className="relative h-screen py-[40px] px-[50px] 2xl:py-[80px] 2xl:px-[100px]">
       <video
         className="absolute top-0 left-0 w-full h-full object-cover -z-10"
         autoPlay
@@ -156,8 +156,8 @@ export default function Display() {
       </div>
 
       {/* 팀별 점수 */}
-      <div className="flex flex-row justify-between gap-12 ">
-        <div className="flex flex-row justify-between">
+      <div className="flex flex-row justify-between gap-12 2xl:pt-6">
+        <div className="flex flex-row justify-between h-[500px]">
           <Gauge score={team1} maxScore={50} flip={true} />
           <div className="flex w-[260px] h-[180px] rounded-2xl bg-white/40 -ml-[60px] items-center justify-center">
             <Image
@@ -183,7 +183,7 @@ export default function Display() {
           )}
         </div>
 
-        <div className="flex flex-row">
+        <div className="flex flex-row justify-between h-[500px]">
           <div className="flex w-[260px] h-[180px] rounded-2xl bg-white/40 -mr-[60px] items-center justify-center">
             <Image
               src="/assets/doosan mark.svg"
