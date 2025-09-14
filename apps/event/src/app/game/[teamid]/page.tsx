@@ -2,8 +2,10 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import { getUserId } from "@/utils/userIdentifier";
 import { createClient } from "../../../../../../shared/utils/supabase/client";
-import { useRouter } from "next/navigation";
-import { useEventChannel, EventPayload } from "../../../../../../shared/contexts/EventChannelContext";
+import {
+  useEventChannel,
+  EventPayload,
+} from "../../../../../../shared/contexts/EventChannelContext";
 import Dimmed from "@/app/team-select/components/dimmed";
 import Image from "next/image";
 
@@ -26,13 +28,22 @@ export default function Game({
   const cheerCountRef = useRef(0);
 
   const handleEventUpdate = useCallback((payload: EventPayload) => {
-    console.log('게임 페이지 - 이벤트 업데이트:', payload);
-    
+    console.log("게임 페이지 - 이벤트 업데이트:", payload);
+
     // 이벤트 종료시 결과 페이지로 이동
     if (payload.new?.status === "finished") {
-      checkWinnerAndRedirect();
+      sessionStorage.setItem(
+        "gameResult",
+        JSON.stringify({
+          teamid: gameData.teamid,
+          myScore: cheerCountRef.current,
+          timestamp: Date.now(),
+        })
+      );
+
+      window.location.replace("/result");
     }
-  }, []);
+  }, [gameData.teamid]);
 
   const { isConnected, event, syncEventData } = useEventChannel(
     handleEventUpdate,
@@ -61,35 +72,6 @@ export default function Game({
     initGame();
   }, [params]);
 
-  const checkWinnerAndRedirect = async () => {
-    const { teamid } = await params;
-
-    const { data } = await supabase
-      .from('team_stats_view')
-      .select('cheer_average')
-      .eq('id', teamid)
-      .single();
-  
-    const { data: maxAverage } = await supabase
-      .from('team_stats_view')
-      .select('cheer_average')
-      .order('cheer_average', { ascending: false })
-      .limit(1)
-      .single();
-  
-    const isWin = data?.cheer_average >= maxAverage?.cheer_average
-
-    sessionStorage.setItem('gameResult', JSON.stringify({ 
-      outcome: isWin ? 'win' : 'lose',
-      teamid: teamid,
-      myScore: cheerCountRef.current,
-      teamScore: Math.round(data?.cheer_average || 0),
-      timestamp: Date.now() 
-    }));
-    
-    window.location.replace('/result');
-  };
-
   // 남은 시간 계산 타이머
   useEffect(() => {
     let timer: NodeJS.Timeout | null = null;
@@ -97,7 +79,7 @@ export default function Game({
     if (event?.status === "active" && event?.finished_at) {
       const updateTimer = () => {
         const finishTime = new Date(event.finished_at!).getTime();
-        const now = new Date().getTime()
+        const now = new Date().getTime();
         const remaining = Math.max(0, Math.ceil((finishTime - now) / 1000 - 1));
 
         setTimeRemaining(remaining);
@@ -124,7 +106,7 @@ export default function Game({
   const cheerForTeam = async (teamId: number | null) => {
     const sessionId = getUserId();
 
-    setCheerCount(prev => prev + 1);
+    setCheerCount((prev) => prev + 1);
 
     if (teamId != null) {
       const { error } = await supabase.from("user_cheers").insert({
@@ -197,7 +179,7 @@ export default function Game({
         onClick={() => cheerForTeam(gameData.teamid)}
         disabled={!isGameActive}
         className={`fixed bottom-7 left-1/2 transform -translate-x-1/2 flex items-center justify-center aspect-square w-[230px] h-[400px] sm:w-[260px] sm:h-[408px] z-0 ${
-          !isGameActive ? 'opacity-50 cursor-not-allowed' : ''
+          !isGameActive ? "opacity-50 cursor-not-allowed" : ""
         }`}
       >
         <Image
