@@ -26,3 +26,15 @@ export interface Participant {
   is_winner: boolean;
   joined_at: string;
 }
+export interface GameResult {
+  id: number;
+  event_id: number;
+  winning_team_id: number;
+  max_cheer_average: number;
+  total_participants: number | null;
+  calculated_at: string;
+  created_at: string;
+  team_1_average: number | null;
+  team_2_average: number | null;
+  total_cheers: number | null;
+}
