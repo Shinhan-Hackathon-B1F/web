@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "../styles/globals.css";
 import localFont from "next/font/local";
+import { EventChannelProvider } from "../../../../shared/contexts/EventChannelContext"
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -72,7 +73,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${kbo.variable} ${pretendard.variable} ${digit.variable}`}>
-      <body>{children}</body>
+       <body>
+        <EventChannelProvider eventId={1}>
+          {children}
+        </EventChannelProvider>
+      </body>
     </html>
   )
 }

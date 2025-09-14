@@ -1,9 +1,12 @@
 "use client";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { createClient } from "../../../../../shared/utils/supabase/client";
 import { getUserId } from "@/utils/userIdentifier";
-import { Event } from "../../../../../shared/types";
+import {
+  useEventChannel,
+  EventPayload,
+} from "../../../../../shared/contexts/EventChannelContext";
 import Image from "next/image";
 import Dimmed from "./components/dimmed";
 
@@ -11,53 +14,34 @@ export default function TeamSelect() {
   const router = useRouter();
   const supabase = createClient();
   const [selectedTeam, setSelectedTeam] = useState("");
-
-  const [event, setEvent] = useState<Event | null>(null);
   const [timeRemaining, setTimeRemaining] = useState(-1);
 
-  // 컴포넌트 마운트 시 이벤트 데이터 가져오기
-  useEffect(() => {
-    fetchEventData();
-  }, []);
+  // Provider에서 이벤트 정보 가져오기
+  const handleEventUpdate = useCallback(
+    (payload: EventPayload) => {
+      console.log("팀 선택 페이지 - 이벤트 업데이트:", payload);
 
-  useEffect(() => {
-    const channel = supabase
-      .channel("display-channel")
-      .on(
-        "postgres_changes",
-        {
-          event: "*",
-          schema: "public",
-          table: "events",
-        },
-        (payload) => {
-          if (
-            payload.new &&
-            "status" in payload.new &&
-            payload.new.status === "active"
-          ) {
-            if (selectedTeam) {
-              goToGame(selectedTeam);
-            }
-          }
-          // 이벤트 데이터가 업데이트되면 상태도 업데이트
-          if (payload.new) {
-            setEvent(payload.new as Event);
-          }
-        }
-      )
-      .subscribe();
+      // 게임이 시작되면 자동으로 이동
+      if (payload.new?.status === "active" && selectedTeam) {
+        goToGame(selectedTeam);
+      }
+    },
+    [selectedTeam]
+  );
 
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  }, [router, selectedTeam, supabase]);
+  const { isConnected, event, syncEventData } = useEventChannel(
+    handleEventUpdate,
+    [handleEventUpdate]
+  );
 
   // 남은 시간 계산 타이머
   useEffect(() => {
     let timer: NodeJS.Timeout | null = null;
 
-    if ((event?.status === "selecting" || event?.status === "active") && event?.finished_at) {
+    if (
+      (event?.status === "selecting" || event?.status === "active") &&
+      event?.finished_at
+    ) {
       const updateTimer = () => {
         const finishTime = new Date(event.finished_at!).getTime();
         const now = new Date().getTime();
@@ -123,26 +107,6 @@ export default function TeamSelect() {
     }
   };
 
-  const fetchEventData = async () => {
-    try {
-      const { data: eventData, error } = await supabase
-        .from("events")
-        .select("*")
-        .eq("id", 1)
-        .single();
-
-      if (error) {
-        console.error("이벤트 데이터 가져오기 에러:", error);
-        return;
-      }
-
-      console.log("가져온 이벤트 데이터:", eventData);
-      setEvent(eventData);
-    } catch (error) {
-      console.error("fetchEventData 에러:", error);
-    }
-  };
-
   const goToGame = (teamid: string) => {
     joinTeam(selectedTeam, getUserId());
     router.push(`/game/${teamid}`);
@@ -162,9 +126,11 @@ export default function TeamSelect() {
 
   return (
     <div className="max-w-screen mx-auto min-h-screen flex flex-col text-white">
-      {event?.status === "selecting" && timeRemaining % 60 <= 3 && timeRemaining % 60 >= 0 && (
-        <Dimmed text={formatTime(timeRemaining)}></Dimmed>
-      )}
+      {event?.status === "selecting" &&
+        timeRemaining % 60 <= 3 &&
+        timeRemaining % 60 >= 0 && (
+          <Dimmed text={formatTime(timeRemaining)}></Dimmed>
+        )}
 
       {/* Header */}
       <div className="text-center pt-16 pb-24">
