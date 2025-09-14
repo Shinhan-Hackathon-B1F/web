@@ -5,10 +5,12 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { Event } from "../../../../shared/types";
+import { useEventStart } from "../hooks/useEventStart";
 
 export default function Display() {
   const supabase = createClient();
   const router = useRouter();
+  const { startEvent, isStarting } = useEventStart();
 
   const [event, setEvent] = useState<Event | null>(null);
   const [timeRemaining, setTimeRemaining] = useState(0);
@@ -111,6 +113,15 @@ export default function Display() {
     }
   };
 
+  const handleStartEvent = async () => {
+    try {
+      await startEvent();
+      console.log("전광판: 이벤트 시작됨");
+    } catch (error) {
+      console.error("전광판: 이벤트 시작 실패", error);
+    }
+  };
+
   return (
     <div className="h-screen bg-gradient-to-r from-[#00226B] to-[#001AC3] text-white relative overflow-hidden">
       {/* Background decorative elements */}
@@ -119,19 +130,35 @@ export default function Display() {
         <div className="absolute bottom-20 right-10 w-48 h-48 bg-white rounded-full opacity-10"></div>
       </div>
 
-      {/* Timer */}
-
+      {/* Timer - 클릭 가능하게 수정 */}
       <div className="absolute top-8 right-8 2xl:top-24 2xl:right-24 flex gap-2 z-50">
-        <div className="bg-[#121212] p-6 rounded-2xl">
+        <button
+          onClick={handleStartEvent}
+          disabled={
+            isStarting ||
+            event?.status === "selecting" ||
+            event?.status === "active"
+          }
+          className={`bg-[#121212] p-6 rounded-2xl transition-all ${
+            isStarting ||
+            event?.status === "selecting" ||
+            event?.status === "active"
+              ? "cursor-not-allowed"
+              : "cursor-pointer hover:bg-[#1a1a1a] hover:scale-105 border-2 border-transparent hover:border-white/20"
+          }`}
+        >
           <div className="relative inline-block">
-            <h1 className="font-digit text-6xl tracking-[-4.5%] text-gray-800">00</h1>
+            <h1 className="font-digit text-6xl tracking-[-4.5%] text-gray-800">
+              00
+            </h1>
             <span className="absolute top-0 right-0 font-digit text-6xl tracking-[-4.5%]">
-            {formatTime(timeRemaining)}
+              {formatTime(timeRemaining)}
             </span>
           </div>
-          
-          <span className="font-pretendard font-semibold text-4xl ml-1 relative top-1">초</span>
-        </div>
+          <span className="font-pretendard font-semibold text-4xl ml-1 relative top-1">
+            초
+          </span>
+        </button>
       </div>
 
       {/* Header */}
