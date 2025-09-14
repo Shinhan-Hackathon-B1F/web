@@ -1,9 +1,9 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { getUserId } from "@/utils/userIdentifier";
 import { createClient } from "../../../../../../shared/utils/supabase/client";
 import { useRouter } from "next/navigation";
-import { Event } from "../../../../../../shared/types"
+import { useEventChannel, EventPayload } from "../../../../../../shared/contexts/EventChannelContext";
 import Dimmed from "@/app/team-select/components/dimmed";
 import Image from "next/image";
 
@@ -13,7 +13,6 @@ export default function Game({
   params: Promise<{ teamid: number }>;
 }) {
   const supabase = createClient();
-  const router = useRouter();
 
   const [gameData, setGameData] = useState({
     teamid: null as number | null,
@@ -21,21 +20,29 @@ export default function Game({
     loading: true,
   });
 
-  const [event, setEvent] = useState<Event | null>(null);
   const [timeRemaining, setTimeRemaining] = useState(-1);
-
   const [cheerCount, setCheerCount] = useState(0);
 
   const cheerCountRef = useRef(0);
+
+  const handleEventUpdate = useCallback((payload: EventPayload) => {
+    console.log('게임 페이지 - 이벤트 업데이트:', payload);
+    
+    // 이벤트 종료시 결과 페이지로 이동
+    if (payload.new?.status === "finished") {
+      checkWinnerAndRedirect();
+    }
+  }, []);
+
+  const { isConnected, event, syncEventData } = useEventChannel(
+    handleEventUpdate,
+    [handleEventUpdate]
+  );
 
   // cheerCount가 변경될 때마다 ref도 업데이트
   useEffect(() => {
     cheerCountRef.current = cheerCount;
   }, [cheerCount]);
-
-  useEffect(() => {
-    fetchEventData();
-  }, []);
 
   useEffect(() => {
     const initGame = async () => {
@@ -49,60 +56,10 @@ export default function Game({
       });
 
       console.log(`User ${userId} joined team ${teamid}`);
-      
-      // 초기 이벤트 데이터 로딩
-      await fetchEventData();
     };
 
     initGame();
   }, [params]);
-
-  // 이벤트 데이터 가져오기
-  const fetchEventData = async () => {
-    const { data: eventData } = await supabase
-      .from("events")
-      .select("*")
-      .eq("id", 1)
-      .single();
-
-    setEvent(eventData);
-  };
-
-  // 실시간 이벤트 구독
-  useEffect(() => {
-    const channel = supabase
-      .channel("display-channel")
-      .on(
-        "postgres_changes",
-        {
-          event: "*",
-          schema: "public",
-          table: "events",
-        },
-        (payload) => {
-          console.log(payload);
-          
-          // 이벤트 데이터 업데이트
-          if (payload.new) {
-            setEvent(payload.new as Event);
-          }
-          
-          // 이벤트 종료시 결과 페이지로 이동
-          if (
-            payload.new &&
-            "status" in payload.new &&
-            payload.new.status === "finished"
-          ) {
-            checkWinnerAndRedirect()
-          }
-        }
-      )
-      .subscribe();
-
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  }, [supabase, router, params]);
 
   const checkWinnerAndRedirect = async () => {
     const { teamid } = await params;
@@ -238,7 +195,10 @@ export default function Game({
 
       <button
         onClick={() => cheerForTeam(gameData.teamid)}
-        className="fixed bottom-7 left-1/2 transform -translate-x-1/2 flex items-center justify-center aspect-square w-[230px] h-[400px] sm:w-[260px] sm:h-[408px] z-0"
+        disabled={!isGameActive}
+        className={`fixed bottom-7 left-1/2 transform -translate-x-1/2 flex items-center justify-center aspect-square w-[230px] h-[400px] sm:w-[260px] sm:h-[408px] z-0 ${
+          !isGameActive ? 'opacity-50 cursor-not-allowed' : ''
+        }`}
       >
         <Image
           src={`/assets/teambutton/${
