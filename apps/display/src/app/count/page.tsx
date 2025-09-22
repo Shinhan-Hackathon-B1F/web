@@ -161,7 +161,6 @@ export default function Display() {
         ref={setVideoRef}
         className="absolute top-0 left-0 w-full h-full object-cover -z-10"
         playsInline
-        muted
         preload="auto"
       >
         <source src="/assets/카스 광고 영상.mp4" type="video/mp4" />
