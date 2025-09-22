@@ -16,11 +16,36 @@ export default function Display() {
 
   // 디바운싱을 위한 타이머
   const [updateTimer, setUpdateTimer] = useState<NodeJS.Timeout | null>(null);
+  
+  const [videoRef, setVideoRef] = useState<HTMLVideoElement | null>(null);
 
   useEffect(() => {
     fetchData();
     fetchTeamStats();
   }, []);
+
+  // 비디오 로드 및 재생 제어
+  useEffect(() => {
+    if (videoRef) {
+      // 비디오가 로드되면 첫 프레임을 보여주기 위해 currentTime을 0.1로 설정
+      const handleLoadedData = () => {
+        videoRef.currentTime = 0.1; // 첫 프레임 표시
+      };
+
+      videoRef.addEventListener('loadeddata', handleLoadedData);
+      
+      // 10초 후 비디오 재생 시작
+      const videoTimer = setTimeout(() => {
+        videoRef.currentTime = 0; // 처음부터 재생
+        videoRef.play();
+      }, 10000);
+
+      return () => {
+        clearTimeout(videoTimer);
+        videoRef.removeEventListener('loadeddata', handleLoadedData);
+      };
+    }
+  }, [videoRef]);
 
   const fetchData = async () => {
     const { data: eventData } = await supabase
@@ -133,12 +158,15 @@ export default function Display() {
   return (
     <div className="relative h-screen py-[40px] px-[50px] 2xl:py-[80px] 2xl:px-[100px]">
       <video
+        ref={setVideoRef}
         className="absolute top-0 left-0 w-full h-full object-cover -z-10"
-        autoPlay
         playsInline
+        muted
+        preload="auto"
       >
         <source src="/assets/카스 광고 영상.mp4" type="video/mp4" />
       </video>
+      
       <div className="flex flex-row justify-between pb-[100px]">
         <div className="relative w-[357px] h-[40px] 2xl:w-[715px] 2xl:h-[80px]">
           <Image

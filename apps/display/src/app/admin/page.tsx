@@ -49,45 +49,45 @@ export default function Admin() {
   };
 
   const startEvent = async () => {
-    const selectingDuration = 21000; // 21초
-    const activeDuration = 11000; // 11초  
-    const totalDuration = selectingDuration + activeDuration; // 32초
-    
+    const selectingDuration = 41000; // 41초
+    const activeDuration = 21000; // 21초
+    const totalDuration = selectingDuration + activeDuration; // 62초
+
     const now = new Date();
     const finishedAt = new Date(now.getTime() + totalDuration);
     const { error } = await supabase
-    .from("events")
-    .update({
-      status: "selecting",
-      started_at: now.toISOString(), // UTC 기준
-      finished_at: finishedAt.toISOString(), // UTC 기준
-    })
-    .eq("id", 1);
-  
+      .from("events")
+      .update({
+        status: "selecting",
+        started_at: now.toISOString(), // UTC 기준
+        finished_at: finishedAt.toISOString(), // UTC 기준
+      })
+      .eq("id", 1);
+
     if (error) {
       console.error("이벤트 업데이트 오류:", error);
       return;
     }
-  
-    // 21초 후 active 상태로 변경
+
+    // 41초 후 active 상태로 변경
     setTimeout(async () => {
       const { error } = await supabase
         .from("events")
         .update({ status: "active" })
         .eq("id", 1);
-  
+
       if (error) {
         console.error("선택시간 종료 오류:", error);
       }
     }, selectingDuration);
-  
-    // 32초 후 (21초 selecting + 11초 active) finished 상태로 변경
+
+    // 62초 후 (selecting + active) finished 상태로 변경
     setTimeout(async () => {
       const { error } = await supabase
         .from("events")
         .update({ status: "finished" })
         .eq("id", 1);
-  
+
       if (error) {
         console.error("이벤트 종료 오류:", error);
       }

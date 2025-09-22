@@ -50,8 +50,8 @@ export function GlobalEventTimer() {
             const now = new Date().getTime();
             const elapsed = now - startTime; // 이미 경과된 시간
             
-            const selectingDuration = 21000; // 21초
-            const totalDuration = 32000; // 32초
+            const selectingDuration = 41000; // 41초
+            const totalDuration = 62000; // 62초
             
             console.log("📊 시간 계산:", {
               elapsed: elapsed + "ms",
@@ -59,7 +59,7 @@ export function GlobalEventTimer() {
               totalDuration: totalDuration + "ms"
             });
             
-            // 21초 후 active 상태로 변경 (이미 경과된 시간 고려)
+            // 41초 후 active 상태로 변경 (이미 경과된 시간 고려)
             const remainingToActive = Math.max(0, selectingDuration - elapsed);
             if (remainingToActive > 0) {
               console.log(`⏳ ${remainingToActive}ms 후 active로 변경 예약`);
@@ -109,7 +109,7 @@ export function GlobalEventTimer() {
               }, remainingToFinished);
             } else {
               console.log("⚡ 이미 시간이 지나서 즉시 finished로 변경");
-              // 이미 32초가 지났다면 즉시 finished로 변경
+              // 이미 62초가 지났다면 즉시 finished로 변경
               supabase.from("events").update({ status: "finished" }).eq("id", 1);
             }
           }

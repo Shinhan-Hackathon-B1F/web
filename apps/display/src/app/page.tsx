@@ -61,7 +61,7 @@ export default function Display() {
         console.log(finishTime, now);
         const remaining = Math.max(
           0,
-          Math.ceil((finishTime - now) / 1000 - 11)
+          Math.ceil((finishTime - now) / 1000 - 21)
         );
 
         console.log(remaining);

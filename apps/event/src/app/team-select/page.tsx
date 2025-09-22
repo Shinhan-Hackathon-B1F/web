@@ -48,7 +48,7 @@ export default function TeamSelect() {
         console.log(finishTime, now);
         const remaining = Math.max(
           0,
-          Math.ceil((finishTime - now) / 1000 - 12)
+          Math.ceil((finishTime - now) / 1000 - 22)
         );
 
         console.log(remaining);

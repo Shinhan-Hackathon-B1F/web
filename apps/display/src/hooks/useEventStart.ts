@@ -14,9 +14,9 @@ export const useEventStart = () => {
     setIsStarting(true);
     
     try {
-      const selectingDuration = 21000; // 21초
-      const activeDuration = 11000; // 11초
-      const totalDuration = selectingDuration + activeDuration; // 32초
+      const selectingDuration = 41000; // 41초
+      const activeDuration = 21000; // 21초
+      const totalDuration = selectingDuration + activeDuration; // 62초
 
       const now = new Date();
       const finishedAt = new Date(now.getTime() + totalDuration);
@@ -37,7 +37,7 @@ export const useEventStart = () => {
       console.log("🚀 useEventStart: 이벤트 시작 - selecting 상태로 변경");
       console.log("⏰ GlobalEventTimer가 자동으로 타이머를 관리합니다");
 
-      // 32초 후 UI 상태만 해제 (실제 이벤트는 GlobalEventTimer에서 관리)
+      // 62초 후 UI 상태만 해제 (실제 이벤트는 GlobalEventTimer에서 관리)
       setTimeout(() => {
         setIsStarting(false);
       }, totalDuration);
